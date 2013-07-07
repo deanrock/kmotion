@@ -88,6 +88,7 @@ def install():
     kmotion_dir = os.getcwd()
     
     kmotion_uid = os.stat('%s/install_core.py' % kmotion_dir)[stat.ST_UID]
+    kmotion_gid = os.stat('%s/install_core.py' % kmotion_dir)[stat.ST_GID]
     
     parser = ConfigParser.SafeConfigParser()
     parser.read('%s/core/core_rc' % kmotion_dir)
@@ -108,7 +109,33 @@ def install():
         fail()
         raise exit_('Corrupt \'kmotion_rc\' : %s' % sys.exc_info()[1])
     ok()
-      
+    
+    # ##########################################################################
+    
+    # setup FIFO's
+    checking('Generating FIFO\'s')
+    # use BASH rather than os.mkfifo(), FIFO bug workaround :)
+    fifo_func = '%s/www/fifo_func' % kmotion_dir
+    if not os.path.exists(fifo_func):
+        # os.mkfifo(fifo_func)
+        call(['mkfifo', fifo_func])
+    
+    fifo_settings = '%s/www/fifo_settings_wr' % kmotion_dir
+    if not os.path.exists(fifo_settings):
+        # os.mkfifo(fifo_settings)
+        call(['mkfifo', fifo_settings])
+    
+    fifo_ptz = '%s/www/fifo_ptz' % kmotion_dir
+    if not os.path.exists(fifo_ptz):
+        #os.mkfifo(fifo_ptz)
+        call(['mkfifo', fifo_ptz])
+
+    fifo_ptz_preset = '%s/www/fifo_ptz_preset' % kmotion_dir
+    if not os.path.exists(fifo_ptz_preset):
+        #os.mkfifo(fifo_ptz_preset)
+        call(['mkfifo', fifo_ptz_preset])
+    ok()
+    
     # ##########################################################################
     
     # generate kmotion vhost
@@ -121,19 +148,19 @@ def install():
     
     # chown is needed so kmotion vhost is not locked to root allowing non root
     # kmotion to regenerate the vhost
-    os.chown('%s/www/vhosts/kmotion' % kmotion_dir, kmotion_uid, kmotion_uid) 
+    os.chown('%s/www/vhosts/kmotion' % kmotion_dir, kmotion_uid, kmotion_gid) 
     ok()
     
     # ##########################################################################
     
     checking('Generating \'kmotion\' executable')
-    init_core.gen_kmotion(kmotion_dir, kmotion_uid)
+    init_core.gen_kmotion(kmotion_dir, kmotion_uid, kmotion_gid)
     ok()
 
     # ##########################################################################
     
     checking('Generating \'kmotion_ptz\' executable')
-    init_core.gen_kmotion_ptz(kmotion_dir, kmotion_uid)
+    init_core.gen_kmotion_ptz(kmotion_dir, kmotion_uid, kmotion_gid)
     ok()
     
     print LINE_TEXT

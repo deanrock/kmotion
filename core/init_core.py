@@ -263,8 +263,8 @@ def set_uid_gid_mutex(kmotion_dir, uid, gid):
 def set_uid_gid_named_pipes(kmotion_dir, uid, gid):
     """
     Generate named pipes for function, settings and ptz communications with the 
-    appropreate 'uid' and 'gid'. Called by 'install' and 'core_setup' the 'uid' 
-    and 'gid' are set to allow the apache2 user to write to these files.
+    appropreate 'uid' and 'gid'. The 'uid' and 'gid' are set to allow the 
+    apache2 user to write to these files.
     
     args    : kmotion_dir ... the 'root' directory of kmotion 
               uid ...         the user id
@@ -367,19 +367,21 @@ def gen_vhost(kmotion_dir):
         lines[i] = lines[i].replace('%ramdisk_dir%', ramdisk_dir)
         lines[i] = lines[i].replace('%www_dir%', '%s/www/www' % kmotion_dir)
         lines[i] = lines[i].replace('%cgi_bin_dir%', '%s/www/www/cgi_bin' % kmotion_dir)
+        lines[i] = lines[i].replace('%logs_dir%', '%s/www/apache_logs' % kmotion_dir)
         lines[i] = lines[i].replace('%port%', port)
         lines[i] = lines[i].replace('%LDAP_block%',  LDAP_block)
         f_obj1.write(lines[i])
     f_obj1.close()
         
       
-def gen_kmotion(kmotion_dir, uid):
+def gen_kmotion(kmotion_dir, uid, gid):
     """
     Generates a kmotion executable which starts the kmotion daemons, executable 
     from anywhere in the system
     
     args    : kmotion_dir ... the 'root' directory of kmotion
-              uid ...         the uid for the kmotion reload  
+              uid ...         the uid for kmotion  
+              gid ...         the gid for kmotion  
     excepts : 
     return  : none
     """
@@ -415,16 +417,17 @@ cd %s/core
     f_obj.close()    
 
     os.chmod('%s/kmotion' % kmotion_dir, 0755)
-    os.chown('%s/kmotion' % kmotion_dir, uid, uid)
+    os.chown('%s/kmotion' % kmotion_dir, uid, gid)
     
       
-def gen_kmotion_ptz(kmotion_dir, uid):
+def gen_kmotion_ptz(kmotion_dir, uid, gid):
     """
     Generates a kmotion_ptz executable which activates a ptz preset, 
     executable from anywhere in the system
     
     args    : kmotion_dir ... the 'root' directory of kmotion
-              uid ...         the uid for the kmotion reload      
+              uid ...         the uid for kmotion  
+              gid ...         the gid for kmotion      
     excepts : 
     return  : none
     """
@@ -472,7 +475,7 @@ cd %s/core
     f_obj.close()    
 
     os.chmod('%s/kmotion_ptz' % kmotion_dir, 0755)
-    os.chown('%s/kmotion_ptz' % kmotion_dir, uid, uid)
+    os.chown('%s/kmotion_ptz' % kmotion_dir, uid, gid)
     
     
 def mutex_www_parser_rd(kmotion_dir):

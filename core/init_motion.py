@@ -143,7 +143,27 @@ def gen_threads_conf(kmotion_dir, feed_list, ramdisk_dir, images_dbase_dir, pars
 gap 2
 pre_capture 1
 post_capture 16
-
+quality 100
+ffmpeg_bps 400000'''
+        
+        # pal or ntsc,
+        if parser.get('motion_feed%02i' % feed, 'feed_pal') == 'true':
+            print >> f_obj1, 'norm 0' 
+        else:
+            print >> f_obj1, 'norm 1' 
+            
+        # feed mask, 
+        if parser.get('motion_feed%02i' % feed, 'feed_mask') != '0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#':
+            print >> f_obj1, 'mask_file %s/core/masks/mask%0.2d.pgm' % (kmotion_dir, feed)  
+            
+        # framerate,
+        if (parser.get('motion_feed%02i' % feed, 'feed_smovie_enabled') == 'true' or 
+            parser.get('motion_feed%02i' % feed, 'feed_movie_enabled') == 'true'):
+            print >> f_obj1, 'framerate %s' % parser.get('motion_feed%02i' % feed, 'feed_fps')
+        else:
+            print >> f_obj1, 'framerate 3' # default for feed updates
+        
+        print >> f_obj1,  '''
 # ------------------------------------------------------------------------------
 # 'user' section from 'virtual_motion_conf/thread%02i.conf'
 # ------------------------------------------------------------------------------
@@ -161,6 +181,7 @@ post_capture 16
             print >> f_obj1, user_conf
         
         print >> f_obj1, '''
+        
 # ------------------------------------------------------------------------------
 # 'override' section
 # ------------------------------------------------------------------------------
@@ -184,51 +205,31 @@ webcam_localhost on
             
         print >> f_obj1, 'width %s' % parser.get('motion_feed%02i' % feed, 'feed_width') 
         print >> f_obj1, 'height %s' % parser.get('motion_feed%02i' % feed, 'feed_height') 
-        print >> f_obj1, 'quality %s' % parser.get('motion_feed%02i' % feed, 'feed_quality')
         
         # show motion box
         if parser.get('motion_feed%02i' % feed, 'feed_show_box') == 'true': 
             print >> f_obj1, 'locate on'
              
         # ptz enabled, if 'ptz_track_type' == 9, useing plugins, disable here
-        if parser.get('motion_feed%02i' % feed, 'ptz_enabled') == 'true' and parser.get('motion_feed%02i' % feed, 'ptz_track_type') < 9: 
+        if parser.get('motion_feed%02i' % feed, 'ptz_enabled') == 'true' and int(parser.get('motion_feed%02i' % feed, 'ptz_track_type')) < 9: 
             print >> f_obj1, 'track_type %s' % parser.get('motion_feed%02i' % feed, 'ptz_track_type')
             
-        # framerate
-        if (parser.get('motion_feed%02i' % feed, 'feed_smovie_enabled') == 'true' or 
-            parser.get('motion_feed%02i' % feed, 'feed_movie_enabled') == 'true'):
-            print >> f_obj1, 'framerate %s' % parser.get('motion_feed%02i' % feed, 'feed_fps')
-        elif parser.get('motion_feed%02i' % feed, 'feed_updates') == 'true':
-            print >> f_obj1, 'framerate 5' # rapid feed updates enabled
-        else:
-            print >> f_obj1, 'framerate 1'
-            
-        # smovie mode or feed updates
-        if (parser.get('motion_feed%02i' % feed, 'feed_smovie_enabled') == 'true' or 
-            parser.get('motion_feed%02i' % feed, 'feed_updates') == 'true'):
-            print >> f_obj1, 'output_normal on'
-        else:
-            print >> f_obj1, 'output_normal off'
+        # always on for feed updates
+        print >> f_obj1, 'output_normal on'
 
         # movie mode
         if parser.get('motion_feed%02i' % feed, 'feed_movie_enabled') == 'true': 
-            print >> f_obj1, 'ffmpeg_bps %s000' % parser.get('motion_feed%02i' % feed, 'feed_kbs')
             print >> f_obj1, 'ffmpeg_cap_new on'
         else:
             print >> f_obj1, 'ffmpeg_cap_new off'
             
         print >> f_obj1, '' 
             
-        # feed mask
-        if parser.get('motion_feed%02i' % feed, 'feed_mask') != '0#0#0#0#0#0#0#0#0#0#':
-            print >> f_obj1, 'mask_file %s/core/masks/mask%0.2d.pgm' % (kmotion_dir, feed)            
-            
         # prefix to 'walk backwards' from the 'target_dir'
         rel_prefix = ('../' * len(ramdisk_dir.split('/')))[:-1]
         
-        # special case of smovie mode disabled and feed updates
-        if (parser.get('motion_feed%02i' % feed, 'feed_smovie_enabled') == 'false' and 
-            parser.get('motion_feed%02i' % feed, 'feed_updates') == 'true'):
+        # special case of smovie mode disabled 
+        if (parser.get('motion_feed%02i' % feed, 'feed_smovie_enabled') == 'false'):
             print >> f_obj1, 'jpeg_filename tmp/%%H%%M%%S%%q%0.2d' % feed
         else:
             print >> f_obj1, 'jpeg_filename %s%s/%%Y%%m%%d/%0.2d/smovie/%%H%%M%%S/%%q' % (rel_prefix, images_dbase_dir, feed)

@@ -103,6 +103,12 @@ def kill_daemons():
         logger.log('kill_daemons() - resorting to kill -9 ... ouch !', 'DEBUG')
         Popen('killall -9 -q motion', shell=True) # if motion hangs get nasty !
     
+    # to kill off any 'cat' zombies ...
+    Popen('pkill -f \'cat.+/www/fifo_ptz\'', shell=True) 
+    Popen('pkill -f \'cat.+/www/fifo_ptz_preset\'', shell=True) 
+    Popen('pkill -f \'cat.+/www/fifo_settings_wr\'', shell=True) 
+    Popen('pkill -f \'cat.+/www/fifo_func\'', shell=True) 
+        
     logger.log('kill_daemons() - daemons killed ...', 'DEBUG')
 
 

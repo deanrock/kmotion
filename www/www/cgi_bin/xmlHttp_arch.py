@@ -189,7 +189,10 @@ def movie_journal_data(images_dbase_dir, date_, feed, fps_time, fps):
             dt = datetime.datetime(1900, 1, 1, int(journal[0][:2]), int(journal[0][2:4]), int(journal[0][4:]))
             dt += datetime.timedelta(seconds = -2)
             movie_end = dt.strftime('%H%M%S')
-
+            
+            # check for - or 0 movie length
+            if movie_end <= movie: continue
+            
             fps_latest = 0 # scan for correct fps time slot
             for i in range(len(fps_time)):
                 if  movie < fps_time[i]: break

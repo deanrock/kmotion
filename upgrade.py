@@ -390,7 +390,13 @@ def restart_apache2():
     return  : bool ... success
     """
     
-    return (call(['apache2ctl', 'restart']) == 0)
+    p_objs = Popen('which apache2ctl', shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
+    if p_objs.stdout.readline() != '': 
+        return (call(['apache2ctl', 'restart']) == 0)
+        
+    else:
+        return (call(['apachectl', 'restart']) == 0)
+        
     #apache2s = ['/etc/init.d/apache2', '/etc/init.d/httpd']
     #for apache2 in apache2s:  
         #if os.path.isfile(apache2):

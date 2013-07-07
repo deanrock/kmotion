@@ -59,8 +59,6 @@ def index(req):
     fna ... feed name
     fbo ... feed show box
     ffp ... feed fps
-    fqu ... feed quality
-    fkb ... feed kbs
     fpe ... feed snap enabled
     fsn ... feed snap interval
     ffe ... feed smovie enabled
@@ -85,6 +83,14 @@ def index(req):
     p3y ... PTZ preset 3 y
     p4x ... PTZ preset 4 x
     p4y ... PTZ preset 4 y
+    
+    st1 ... schedule time line 1
+    st2 ... schedule time line 2
+    st3 ... schedule time line 3
+    st4 ... schedule time line 4
+    st5 ... schedule time line 5
+    st6 ... schedule time line 6
+    st7 ... schedule time line 7
     
     dif ... display feeds
     col ... color select
@@ -132,6 +138,7 @@ def index(req):
         
         coded_str += '$fma%i:%s' % (i, parser.get('motion_feed%02i' % i, 'feed_mask'))
         coded_str += '$fen%i:%s' % (i, bool_num(parser.get('motion_feed%02i' % i, 'feed_enabled')))
+        coded_str += '$fpl%i:%s' % (i, bool_num(parser.get('motion_feed%02i' % i, 'feed_pal')))
         coded_str += '$fde%i:%s' % (i, parser.get('motion_feed%02i' % i, 'feed_device'))
         coded_str += '$fin%i:%s' % (i, parser.get('motion_feed%02i' % i, 'feed_input'))
         coded_str += '$ful%i:%s' % (i, expand_chars(parser.get('motion_feed%02i' % i, 'feed_url')))
@@ -144,14 +151,11 @@ def index(req):
         coded_str += '$fna%i:%s' % (i, expand_chars(parser.get('motion_feed%02i' % i, 'feed_name')))
         coded_str += '$fbo%i:%s' % (i, bool_num(parser.get('motion_feed%02i' % i, 'feed_show_box')))
         coded_str += '$ffp%i:%s' % (i, parser.get('motion_feed%02i' % i, 'feed_fps'))
-        coded_str += '$fqu%i:%s' % (i, parser.get('motion_feed%02i' % i, 'feed_quality'))
-        coded_str += '$fkb%i:%s' % (i, parser.get('motion_feed%02i' % i, 'feed_kbs'))
         
         coded_str += '$fpe%i:%s' % (i, bool_num(parser.get('motion_feed%02i' % i, 'feed_snap_enabled')))
         coded_str += '$fsn%i:%s' % (i, parser.get('motion_feed%02i' % i, 'feed_snap_interval'))
         coded_str += '$ffe%i:%s' % (i, bool_num(parser.get('motion_feed%02i' % i, 'feed_smovie_enabled')))
         coded_str += '$fme%i:%s' % (i, bool_num(parser.get('motion_feed%02i' % i, 'feed_movie_enabled')))
-        coded_str += '$fup%i:%s' % (i, bool_num(parser.get('motion_feed%02i' % i, 'feed_updates')))
         
         coded_str += '$psx%i:%s' % (i, parser.get('motion_feed%02i' % i, 'ptz_step_x'))
         coded_str += '$psy%i:%s' % (i, parser.get('motion_feed%02i' % i, 'ptz_step_y'))
@@ -172,6 +176,34 @@ def index(req):
         coded_str += '$p4x%i:%s' % (i, parser.get('motion_feed%02i' % i, 'ptz_preset4_x'))
         coded_str += '$p4y%i:%s' % (i, parser.get('motion_feed%02i' % i, 'ptz_preset4_y'))
         coded_str += '$fne%i:%s' % (i, bool_num(parser.get('system', 'func_f%02i_enabled' % i)))
+    
+    for i in range(1, 9):
+        
+        coded_str += '$st1%i:%s' % (i, parser.get('schedule%i' % i, 'tline1'))
+        coded_str += '$st2%i:%s' % (i, parser.get('schedule%i' % i, 'tline2'))
+        coded_str += '$st3%i:%s' % (i, parser.get('schedule%i' % i, 'tline3'))
+        coded_str += '$st4%i:%s' % (i, parser.get('schedule%i' % i, 'tline4'))
+        coded_str += '$st5%i:%s' % (i, parser.get('schedule%i' % i, 'tline5'))
+        coded_str += '$st6%i:%s' % (i, parser.get('schedule%i' % i, 'tline6'))
+        coded_str += '$st7%i:%s' % (i, parser.get('schedule%i' % i, 'tline7'))
+        
+    for i in range(1, 5):
+        
+        coded_str += '$ed1%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline1_dates'))
+        coded_str += '$ed2%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline2_dates'))
+        coded_str += '$ed3%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline3_dates'))
+        coded_str += '$ed4%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline4_dates'))
+        coded_str += '$ed5%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline5_dates'))
+        coded_str += '$ed6%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline6_dates'))
+        coded_str += '$ed7%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline7_dates'))
+        
+        coded_str += '$et1%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline1'))
+        coded_str += '$et2%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline2'))
+        coded_str += '$et3%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline3'))
+        coded_str += '$et4%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline4'))
+        coded_str += '$et5%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline5'))
+        coded_str += '$et6%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline6'))
+        coded_str += '$et7%i:%s' % (i, parser.get('schedule_except%i' % i, 'tline7'))
     
     for i in range(1, 13):
         coded_str += '$dif%i:%s' % (i, parser.get('misc', 'misc4_display_feeds_%02i' % i))

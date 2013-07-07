@@ -107,7 +107,7 @@ def uninstall():
 
     # ##########################################################################
     
-    checking('\'apache2ctl restart\'')
+    checking('Apache2 restart')
     ok()
     restart_apache2()
 
@@ -144,7 +144,10 @@ def rm_apache2_include():
     return  : none
     """
     
-    confs = ['/etc/apache2/apache2.conf', '/etc/httpd/conf/httpd.conf', '/etc/apache2/default-server.conf']
+    confs = ['/etc/apache2/apache2.conf', '/etc/apache2/httpd.conf', 
+             '/etc/httpd/conf/httpd.conf', '/etc/httpd/httpd.conf', 
+             '/etc/apache2/default-server.conf']
+    
     for conf in confs:  # coded this way to allow for different .conf files
         if os.path.isfile(conf):
 
@@ -174,7 +177,12 @@ def restart_apache2():
     return  : 
     """
     
-    call(['apache2ctl', 'restart'])
+    if call(['which', 'apachectl']) == 1:
+        call(['apache2ctl', 'restart']) 
+        
+    else:
+        call(['apachectl', 'restart'])
+        
     #apache2s = ['/etc/init.d/apache2', '/etc/init.d/httpd']
     #for apache2 in apache2s:  
         #if os.path.isfile(apache2):

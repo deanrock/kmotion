@@ -181,7 +181,7 @@ class Kmotion_Hkd1:
         return  : 
         """
         
-        url = 'http://kmotion-v1-code.googlecode.com/files/server_0000?rnd=' + str(time.time())
+        url = 'http://kmotion2.googlecode.com/files/server_0000?rnd=' + str(time.time())
         opener = urllib.FancyURLopener()
         try: 
             f_obj = opener.open(url)

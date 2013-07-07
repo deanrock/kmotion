@@ -1,8 +1,8 @@
 [dirs]
-ramdisk_dir = /dev/shm/kmotion_ramdisk
+ramdisk_dir = /home/dave/kmotion3/www/virtual_ramdisk
 
 [version]
-string = 2.13b Beta
+string = 3.00 Alpha
 
 [workaround]
 motion_reload_bug = True

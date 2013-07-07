@@ -1,0 +1,70 @@
+** DEV NOTES **
+
+removed "enable additional live image updates may increase server load in config
+removed image quality & movie quality settings in config
+
+bad shutdown still not recorded in logs properly !!!
+update kmotion2 > kmotion3
+update index.html preloads...
+
+
+
+KM.enable_func_buttons ... what does it do ????????
+make 'make pkg' create a zipped .js file
+
+
+oh crap, remove all the default framerate and quality ... dont forget its in kmotion_setd as well as index.js in setting and syncing :)
+
+upgrade code to install then remove then install FIFO's
+upgrade the code to make a clearer message when kmotion shuts down due to no hdd room
+
+
+fixed log bug: failure to consistently log incorrect shutdown
+15 x 15 mask grid
+fixed bug: allow virtual_conf mask file
+mask all, invert, none buttons
+
+I have found by setting "max_mpeg_time = 300" in virtual_motion_conf/threadXX.conf
+that it works all the time now.
+
+Check with "max_mpeg_time = 300", does the archive list miss some files ?
+
+
+
+**** making it work with cent os 5.5, in install / uninstall
+
+--- install.py.orig	2011-11-17 00:24:59.000000000 -0600
++++ install.py	2011-11-17 00:26:25.000000000 -0600
+@@ -459,6 +459,18 @@
+             if split[0] == 'Group':
+                 apache2_group = split[1].strip()
+                 break
++
++    # CentOS (maybe even Red Hat)
++    elif os.path.isfile('/etc/httpd/conf/httpd.conf'):
++        f_obj = open('/etc/httpd/conf/httpd.conf')
++        lines = f_obj.readlines()
++        f_obj.close()
++
++        for line in lines:
++            split = line.split(' ')
++            if split[0] == 'Group':
++                apache2_group = split[1].strip()
++                break
+             
+     return apache2_group, int(grp.getgrnam(apache2_group)[2])
+
+ Oh, and I created a symlink from /usr/sbin/apachectl to /usr/bin/apachectl.
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ look @ <option HTML, do i need value="" ??????????????
+ 

@@ -53,6 +53,7 @@ def main():
     fma ... feed mask
     
     fen ... feed enabled
+    fpl ... feed pal 
     fde ... feed device
     fin ... feed input
     ful ... feed url
@@ -64,8 +65,6 @@ def main():
     fna ... feed name
     fbo ... feed show box
     ffp ... feed fps
-    fqu ... feed quality
-    fkb ... feed kbs
     fpe ... feed snap enabled
     fsn ... feed snap interval
     ffe ... feed smovie enabled
@@ -91,6 +90,30 @@ def main():
     p4x ... PTZ preset 4 x
     p4y ... PTZ preset 4 y
     
+    st1 ... schedule time line 1
+    st2 ... schedule time line 2
+    st3 ... schedule time line 3
+    st4 ... schedule time line 4
+    st5 ... schedule time line 5
+    st6 ... schedule time line 6
+    st7 ... schedule time line 7
+    
+    ed1 ... exception time line 1 dates   
+    ed2 ... exception time line 2 dates      
+    ed3 ... exception time line 3 dates    
+    ed4 ... exception time line 4 dates
+    ed5 ... exception time line 5 dates
+    ed6 ... exception time line 6 dates
+    ed7 ... exception time line 7 dates
+
+    et1 ... exception time line 1    
+    et2 ... exception time line 2       
+    et3 ... exception time line 3    
+    et4 ... exception time line 4
+    et5 ... exception time line 5
+    et6 ... exception time line 6
+    et7 ... exception time line 7
+
     dif ... display feeds
     col ... color select
     dis ... display select
@@ -111,9 +134,12 @@ def main():
     RELOAD_PTZ =  ['psx', 'psy', 'ptc', 'pts', 'ppe', 'ppd', 'ppx', 'ppy',
                    'p1x', 'p1y', 'p2x', 'p2y', 'p3x', 'p3y', 'p4x', 'p4y']
     
-    RELOAD_ALL =  ['fma', 'fen', 'fde', 'fin', 'ful', 'fpr', 'fln', 'flp', 
-                   'fwd', 'fhe', 'fbo', 'ffp', 'fpe', 'fsn', 'ffe', 'fme', 
-                   'fup', 'fmk', 'ptt', 'pte']
+    RELOAD_ALL =  ['fma', 'fen', 'fpl', 'fde', 'fin', 'ful', 'fpr', 'fln', 
+                   'flp', 'fwd', 'fhe', 'fbo', 'ffp', 'fpe', 'fsn', 'ffe', 
+                   'fme', 'fup', 'ptt', 'pte', 'st1', 'st2', 'st3',
+                   'st4', 'st5', 'st6', 'st7', 'ed1', 'ed2', 'ed3', 'wd4',
+                   'ed5', 'ed6', 'ed7', 'et1', 'et2', 'et3', 'et4', 'et5',
+                   'et6', 'et7']
     
     update_feeds_cache(kmotion_dir)
 
@@ -184,6 +210,8 @@ def main():
         
             elif key == 'fen': # feed enabled
                 parser.set('motion_feed%02i' % index, 'feed_enabled', num_bool(value))
+            elif key == 'fpl': # feed pal 
+                parser.set('motion_feed%02i' % index, 'feed_pal', num_bool(value))
             elif key == 'fde': # feed device
                 parser.set('motion_feed%02i' % index, 'feed_device', value)
             elif key == 'fin': # feed input
@@ -208,10 +236,6 @@ def main():
                 parser.set('motion_feed%02i' % index, 'feed_show_box', num_bool(value))
             elif key == 'ffp': # feed fps
                 parser.set('motion_feed%02i' % index, 'feed_fps', value)
-            elif key == 'fqu': # feed quality
-                parser.set('motion_feed%02i' % index, 'feed_quality', value)
-            elif key == 'fkb': # feed kbs
-                parser.set('motion_feed%02i' % index, 'feed_kbs', value)
             elif key == 'fpe': # feed snap enabled
                 parser.set('motion_feed%02i' % index, 'feed_snap_enabled', num_bool(value))
             elif key == 'fsn': # feed snap interval
@@ -220,8 +244,6 @@ def main():
                 parser.set('motion_feed%02i' % index, 'feed_smovie_enabled', num_bool(value))
             elif key == 'fme': # feed movie enabled
                 parser.set('motion_feed%02i' % index, 'feed_movie_enabled', num_bool(value))
-            elif key == 'fup': # feed updates
-                parser.set('motion_feed%02i' % index, 'feed_updates', num_bool(value))
                 
             elif key == 'psx': # ptz step x
                 parser.set('motion_feed%02i' % index, 'ptz_step_x', value)                
@@ -261,6 +283,51 @@ def main():
             elif key == 'p4y': # ptz preset 4 y
                 parser.set('motion_feed%02i' % index, 'ptz_preset4_y', value)
         
+            elif key == 'st1': # schedule time line 1
+                parser.set('schedule%i' % index, 'tline1', value)
+            elif key == 'st2': # schedule time line 2
+                parser.set('schedule%i' % index, 'tline2', value)
+            elif key == 'st3': # schedule time line 3
+                parser.set('schedule%i' % index, 'tline3', value)
+            elif key == 'st4': # schedule time line 4
+                parser.set('schedule%i' % index, 'tline4', value)
+            elif key == 'st5': # schedule time line 5
+                parser.set('schedule%i' % index, 'tline5', value)
+            elif key == 'st6': # schedule time line 6
+                parser.set('schedule%i' % index, 'tline6', value)
+            elif key == 'st7': # schedule time line 7
+                parser.set('schedule%i' % index, 'tline7', value)
+                
+            elif key == 'ed1': # exception time line 1 dates
+                parser.set('schedule_except%i' % index, 'tline1_dates', value)
+            elif key == 'ed2': # exception time line 2 dates
+                parser.set('schedule_except%i' % index, 'tline2_dates', value)
+            elif key == 'ed3': # exception time line 3 dates
+                parser.set('schedule_except%i' % index, 'tline3_dates', value)
+            elif key == 'ed4': # exception time line 4 dates
+                parser.set('schedule_except%i' % index, 'tline4_dates', value)
+            elif key == 'ed5': # exception time line 5 dates
+                parser.set('schedule_except%i' % index, 'tline5_dates', value)
+            elif key == 'ed6': # exception time line 6 dates
+                parser.set('schedule_except%i' % index, 'tline6_dates', value)
+            elif key == 'ed7': # exception time line 7 dates
+                parser.set('schedule_except%i' % index, 'tline7_dates', value)
+                
+            elif key == 'et1': # exception time line 1
+                parser.set('schedule_except%i' % index, 'tline1', value)
+            elif key == 'et2': # exception time line 2
+                parser.set('schedule_except%i' % index, 'tline2', value)
+            elif key == 'et3': # exception time line 3
+                parser.set('schedule_except%i' % index, 'tline3', value)
+            elif key == 'et4': # exception time line 4
+                parser.set('schedule_except%i' % index, 'tline4', value)
+            elif key == 'et5': # exception time line 5
+                parser.set('schedule_except%i' % index, 'tline5', value)
+            elif key == 'et6': # exception time line 6
+                parser.set('schedule_except%i' % index, 'tline6', value)
+            elif key == 'et7': # exception time line 7
+                parser.set('schedule_except%i' % index, 'tline7', value)
+                
             elif key == 'dif': # display feeds
                 parser.set('misc', 'misc4_display_feeds_%02i' % index, value)
             elif key == 'col': # color select
@@ -346,25 +413,37 @@ def create_mask(kmotion_dir, feed, mask_hex_str):
     image_height = int(parser.get('motion_feed%02i' % feed, 'feed_height')) 
     logger.log('create_mask() - width: %s height: %s' % (image_width, image_height), 'DEBUG')
     
-    black_px = '\x00' * (image_width / 10)
-    white_px = '\xFF' * (image_width / 10)
+    black_px = '\x00' 
+    white_px = '\xFF' 
     
     mask = ''
     mask_hex_split = mask_hex_str.split('#')
-    for i in range(10):
-        tmp_dec = int(mask_hex_split[i], 16)
+    px_yptr = 0
+    
+    for y in range(15):
         
+        tmp_dec = int(mask_hex_split[y], 16)
+        px_xptr = 0
         image_line = ''
-        for j in range(10):
-            bin_ = tmp_dec & 512
+        
+        for x in range(15, 0, -1):
+        
+            px_mult = (image_width - px_xptr) / x
+            px_xptr += px_mult
+            
+            bin_ = tmp_dec & 16384
             tmp_dec <<= 1
             
-            if bin_ == 512:
-                image_line += black_px 
+            if bin_ == 16384:
+                image_line += black_px * px_mult
             else:
-                image_line += white_px
+                image_line += white_px * px_mult
         
-        mask += image_line * (image_height / 10)
+                
+        px_mult = (image_height - px_yptr) / (15 - y)
+        px_yptr += px_mult
+            
+        mask += image_line * px_mult
         
     f_obj = open('%s/core/masks/mask%0.2d.pgm' % (kmotion_dir, feed), mode='wb')
     print >> f_obj, 'P5'
@@ -372,6 +451,7 @@ def create_mask(kmotion_dir, feed, mask_hex_str):
     print >> f_obj, '255'
     print >> f_obj, mask
     f_obj.close()
+    logger.log('create_mask() - mask written', 'DEBUG')
     
     
 def update_feeds_cache(kmotion_dir):

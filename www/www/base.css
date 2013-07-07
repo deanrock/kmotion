@@ -106,7 +106,6 @@ Button bar section
 	color: #C1C1C1;
 	font-size: 37px;
 	font-weight: bold;
-	font-style: italic;
 	text-align: center;
 }
 
@@ -213,39 +212,15 @@ Main display section
 	color: #C1C1C1;
 }
 
-#main_display #title_FF { /* firefox top title */
-	padding-top: 4px;
-	letter-spacing: 10px;
-	font-size: 50px;
+#main_display .title { 
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 34px;
 	font-weight: bold;
-	text-align: center;
-}
-
-#main_display #title_OP { /* opera top title */
-	padding-top: 4px;
-	letter-spacing: 10px;
-	font-size: 50px;
-	font-weight: bold;
-	text-align: center;
-}
-
-#main_display #title_IE { /* IE top title */
-	padding-top: 8px;
-	letter-spacing: 10px;
-	font-size: 50px;
-	font-weight: bold;
-	text-align: center;
-}
-
-#main_display .sub_title { /* sub title that goes with a top title */
-	font-size: 15px;
-	line-height: 30px;
-	font-weight: bold;
-	text-align: center;
 }
 
 #main_display .divider {
-	font-size: 4px;
+	font-size: 1px;
 	padding: 0px;
 	margin: 0px;
 	text-align: center;
@@ -255,38 +230,9 @@ Main display section
 	color: #C1C1C1;
 }
 
-#main_display .margin_top_3px {
-	margin-top: 3px;
-}
-
-#main_display .margin_top_4px {
-	margin-top: 4px;
-}
-
 /* *****************************************************************************
 Main display section - CSS specific to 'archive'
 ***************************************************************************** */
-
-#main_display #archive_title_FF { /* firefox archive title */
-	margin-left: auto;
-	margin-right: auto;
-	font-size: 34px;
-	font-weight: bold;
-}
-
-#main_display #archive_title_OP { /* opera archive title */
-	margin-left: auto;
-	margin-right: auto;
-	font-size: 28px;
-	font-weight: bold;
-}
-
-#main_display #archive_title_IE { /* IE archive title */
-	margin-left: auto;
-	margin-right: auto;
-	font-size: 34px;
-	font-weight: bold;
-}
 
 #main_display #archive_flash_warn {
 	text-align: center;
@@ -334,37 +280,39 @@ Main display section - CSS specific to 'archive'
 Main display section - CSS specific to 'config' - General
 ***************************************************************************** */
 
-#main_display .margin_left_20px {
+#main_display .config_backdrop {
+	width: 992px;
+	height: 680px;
+	margin-left: auto;
+	margin-right: auto;
+	background-image: url('./images/config_backdrop.png');
+}
+
+#main_display .config_margin_left_20px {
 	margin-left: 20px;
 }
 
-#main_display .config_bar {
-	margin-top: 10px;
+#main_display .config_button_bar {
 	text-align: center;
 }
 
-#main_display .config_backdrop {
-	width: 790px;
-	height: 540px;
-	margin-top: 11px;
-	margin-left: auto;
-	margin-right: auto;
-	background-image: url('./images/backdrop.png');
+#main_display .config_divider{
+	text-align: center;
 }
 
-#main_display .config_tick_box { 
+#main_display .config_tick_margin { 
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	margin-left: 16px;
+	float: left;
+}
+
+#main_display .config_text_margin { 
 	color: #818181; 
 	font-size: 17px;
 	font-weight: bold;
 	margin-left: 20px;
-	float: left;
-}
-
-#main_display .config_button { 
-	color: #818181; 
-	font-size: 17px;
-	font-weight: bold;
-	margin-left: 24px;
 	float: left;
 }
 
@@ -372,16 +320,10 @@ Main display section - CSS specific to 'config' - General
 	color: #818181; 
 	font-size: 17px;
 	font-weight: bold;
-	margin-left: 20px;
+	margin-left: 0px;
+	float: left;
 }
 
-#main_display .config_text_basic { 
-	color: #818181; 
-	font-size: 17px;
-	font-weight: bold;
-	margin-left: 0px;
-}
-	
 #main_display .config_text_center {
 	color: #818181; 
 	font-size: 17px;
@@ -394,12 +336,44 @@ Main display section - CSS specific to 'config' - General
 }
 
 /* *****************************************************************************
+Main display section - CSS specific to 'config' - Misc
+***************************************************************************** */
+
+#main_display .config_group_margin { 
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	margin-left: 16px;
+}
+
+/* *****************************************************************************
+Main display section - CSS specific to 'config' - Schedules
+***************************************************************************** */
+
+#main_display .sched_selector {
+	margin-left: auto;
+	margin-right: auto;
+	color: #818181; 
+	font-size: 19px;
+	font-weight: bold;
+}
+
+#main_display .sched_status {
+	vertical-align: bottom;
+}
+
+#main_display .sched_timeline {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* *****************************************************************************
 Main display section - CSS specific to 'config' - Server load
 ***************************************************************************** */
 
 #main_display .bar_bground {
-	height: 23px;
-	width: 750px;
+	height: 28px;
+	width: 955px;
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #818181;
@@ -407,15 +381,14 @@ Main display section - CSS specific to 'config' - Server load
 }
 
 #main_display .bar_fground{
-	height: 23px;
+	height: 28px;
 	width: 0px;
-	background-color: #9696ff;
 	position: relative;
 }
 
 #main_display .bar_value {
 	color: #000000;
-	line-height: 23px;
+	line-height: 28px;
 	font-size: 17px;
 	font-weight: bold;
 	float: left;
@@ -426,7 +399,7 @@ Main display section - CSS specific to 'config' - Server load
 #main_display .bar_text { /* progress bar text in a 75px window to align stats */
 	width: 75px;
 	color: #000000;
-	line-height: 23px;
+	line-height: 28px;
 	font-size: 17px;
 	font-weight: bold;
 	padding-left: 5px;
@@ -438,13 +411,13 @@ Main display section - CSS specific to 'config' - Server load
 #main_display .bar_text_IE { /* IE progress bar text in a 75px window to align stats */
 	width: 75px;
 	color: #000000;
-	line-height: 23px;
+	line-height: 28px;
 	font-size: 17px;
 	font-weight: bold;
 	padding-left: 5px;
 	float: left;
 	position: relative;
-	top: -23px;
+	top: -28px;
 	z-index: 1;
 }
 
@@ -456,8 +429,8 @@ Main display section - CSS specific to 'config' - Server Error
 	color: #818181; 
 	font-size: 17px;
 	font-weight: bold;
-	width: 750px;
-	height: 500px;
+	width: 955px;
+	height: 600px;
 	margin-left: 23px;
 	overflow: auto;
 }
@@ -472,16 +445,17 @@ Main display section - CSS specific to 'logs', 'about' and 'msg'
 	margin-right: auto;
 	font-size: 17px;
 	font-weight: bold;
-	width: 750px;
+	width: 992px;
 }
 
 #main_display .logs_backdrop {
 	color: #818181; 
 	font-size: 17px;
 	font-weight: bold;
-	width: 750px;
+	width: 992px;
+	height:641px;
 	margin-top: 18px;
 	margin-left: auto;
 	margin-right: auto;
-	overflow: hidden;
+	overflow: auto;
 }

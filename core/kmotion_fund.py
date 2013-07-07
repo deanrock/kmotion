@@ -49,10 +49,7 @@ def main():
         data = data.rstrip()
         logger.log('FIFO pipe data: %s' % data, 'DEBUG')
         
-        if len(data) < 8:
-            continue
-        
-        if len(data) > 7 and data[-8:] == '99999999': # FIFO purge
+        if len(data) > 2 and data[-3:] == '999': # FIFO purge
             logger.log('FIFO purge', 'DEBUG')
             continue
         

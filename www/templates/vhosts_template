@@ -72,7 +72,7 @@ NameVirtualHost *:%port%
     # Possible values include: debug, info, notice, warn, error, crit,
     LogLevel warn
 
-    ErrorLog /var/log/apache2/error_kmotion.log
-    CustomLog /var/log/apache2/access_kmotion.log combined
+    ErrorLog %logs_dir%/error_kmotion.log
+    #CustomLog %logs_dir%/access_kmotion.log combined
     
 </VirtualHost>

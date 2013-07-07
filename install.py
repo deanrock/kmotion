@@ -21,7 +21,7 @@
 The auto installer
 """
 
-import os, sys, pwd, time, stat, ConfigParser, shutil
+import os, sys, pwd, grp, time, stat, ConfigParser, shutil
 from subprocess import * # breaking habit of a lifetime !
 import core.init_core   as init_core
 import core.daemon_whip as daemon_whip
@@ -167,10 +167,11 @@ def install():
     checking('Searching for possible users to run kmotion service')
     ok()
     print SELECT_USER,
-    users_uid = [[i[0], i[2]] for i in pwd.getpwall() if i[2] > 500 or i[2] == 0]
+    users_uid = [[i[0], i[2], i[3]] for i in pwd.getpwall() if i[2] >= 500 or i[2] == 0]
     
     users = [i[0] for i in users_uid if i[0] != 'root' and i[0] != 'nobody']
     uid =   [i[1] for i in users_uid if i[0] != 'root' and i[0] != 'nobody']
+    gid =   [i[2] for i in users_uid if i[0] != 'root' and i[0] != 'nobody']
     
     for user in users:
         print '\'%s\'' % user,
@@ -181,6 +182,7 @@ def install():
         raise exit_('Invalid user selected, Install aborted')
     kmotion_user = select
     kmotion_uid = uid[users.index(select)]
+    kmotion_gid = gid[users.index(select)]
     
     # ##########################################################################
     
@@ -228,7 +230,7 @@ def install():
     
     # chown is needed so kmotion vhost is not locked to root allowing non root
     # kmotion to regenerate the vhost
-    os.chown('%s/www/vhosts/kmotion' % kmotion_dir, kmotion_uid, kmotion_uid) 
+    os.chown('%s/www/vhosts/kmotion' % kmotion_dir, kmotion_uid, kmotion_gid) 
     ok()
     
     # ##########################################################################
@@ -244,7 +246,7 @@ def install():
         
     # ##########################################################################
     
-    checking('\'apache2ctl restart\'')
+    checking('Apache2 restart')
     ok()
     restart_apache2()
 
@@ -256,22 +258,20 @@ def install():
 
     # ##########################################################################
     
-    apache2_user = get_apache2_user()
-    apache2_uid = pwd.getpwnam(apache2_user).pw_uid
-    
-    checking('Searching for Apache2 user ... found \'%s\'' % apache2_user)
+    apache2_group, apache2_gid = get_apache2_gid()
+    checking('Searching for Apache2 group ... found \'%s\'' % apache2_group)
     ok()
     
     # ##########################################################################
     
     checking('Generating \'kmotion\' executable')
-    init_core.gen_kmotion(kmotion_dir, kmotion_uid)
+    init_core.gen_kmotion(kmotion_dir, kmotion_uid, kmotion_gid)
     ok()
 
     # ##########################################################################
     
     checking('Generating \'kmotion_ptz\' executable')
-    init_core.gen_kmotion_ptz(kmotion_dir, kmotion_uid)
+    init_core.gen_kmotion_ptz(kmotion_dir, kmotion_uid, kmotion_gid)
     ok()
 
     # ##########################################################################
@@ -293,19 +293,19 @@ def install():
     # ##########################################################################
     
     checking('Setting named pipes permissions')
-    init_core.set_uid_gid_named_pipes(kmotion_dir, kmotion_uid, apache2_uid)
+    init_core.set_uid_gid_named_pipes(kmotion_dir, kmotion_uid, apache2_gid)
     ok()
     
     # ##########################################################################
     
     checking('Setting \'servo_state\' permissions')
-    init_core.set_uid_gid_servo_state(kmotion_dir, kmotion_uid, apache2_uid)
+    init_core.set_uid_gid_servo_state(kmotion_dir, kmotion_uid, apache2_gid)
     ok()
     
     # ##########################################################################
     
     checking('Setting mutex permissions')
-    init_core.set_uid_gid_mutex(kmotion_dir, kmotion_uid, apache2_uid)
+    init_core.set_uid_gid_mutex(kmotion_dir, kmotion_uid, apache2_gid)
     ok()
 
     # ##########################################################################
@@ -359,7 +359,10 @@ def modify_apache2(kmotion_dir):
     return  : none
     """
     
-    confs = ['/etc/apache2/apache2.conf', '/etc/httpd/conf/httpd.conf', '/etc/apache2/default-server.conf']
+    confs = ['/etc/apache2/apache2.conf', '/etc/apache2/httpd.conf', 
+             '/etc/httpd/conf/httpd.conf', '/etc/httpd/httpd.conf', 
+             '/etc/apache2/default-server.conf']
+    
     for conf in confs:  # coded this way to allow for different .conf files
         if os.path.isfile(conf):
 
@@ -393,7 +396,12 @@ def restart_apache2():
     return  : 
     """
     
-    call(['apache2ctl', 'restart'])
+    if call(['which', 'apachectl']) == 1:
+        call(['apache2ctl', 'restart']) 
+        
+    else:
+        call(['apachectl', 'restart'])
+        
     #apache2s = ['/etc/init.d/apache2', '/etc/init.d/httpd']
     #for apache2 in apache2s:  
         #if os.path.isfile(apache2):
@@ -406,29 +414,53 @@ def restart_apache2():
         #raise exit_('Unable to locate : %s' % list_format(apache2s))
     
             
-def get_apache2_user():     
+def get_apache2_gid():     
     """
-    Return apache2's user name
+    Return apache2's group name and gid
 
     args    : 
     excepts : 
-    return  : apache2's user name
+    return  : apache2's group name
+              apache2's gid
     """
     
-    p_objs = Popen('ps -fC "apache2"', shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
-    ps1 = p_objs.stdout.readlines()  
-    
-    p_objs = Popen('ps -fC "httpd"', shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
-    ps2 = p_objs.stdout.readlines()
-    
-    for ps in [ps1, ps2]:
-        for line in ps:
-            pos_user = line.split(' ')[0]
-            if pos_user not in ['UID', 'root']:
-                name = pos_user
+    # debian and derivatives
+    if os.path.isfile('/etc/apache2/envvars'):
+        f_obj = open('/etc/apache2/envvars')
+        lines = f_obj.readlines()
+        f_obj.close()
+  
+        for line in lines:
+            split = line.split('=')
+            if split[0] == 'export APACHE_RUN_GROUP':
+                apache2_group = split[1].strip()
                 break
         
-    return name                               
+    # suse
+    elif os.path.isfile('/etc/apache2/uid.conf'):
+        f_obj = open('/etc/apache2/uid.conf')
+        lines = f_obj.readlines()
+        f_obj.close()
+  
+        for line in lines:
+            split = line.split(' ')
+            if split[0] == 'Group':
+                apache2_group = split[1].strip()
+                break
+    
+    # slackware
+    elif os.path.isfile('/etc/httpd/httpd.conf'):
+        f_obj = open('/etc/httpd/httpd.conf')
+        lines = f_obj.readlines()
+        f_obj.close()
+    
+        for line in lines:
+            split = line.split(' ')
+            if split[0] == 'Group':
+                apache2_group = split[1].strip()
+                break
+            
+    return apache2_group, int(grp.getgrnam(apache2_group)[2])
                   
 
 def move_exes(kmotion_dir):
@@ -498,7 +530,7 @@ def modify_crontab(sel_user, exe_path):
 
 def rm_root_pycs(kmotion_dir):
     """
-    Remove and root generated pyc's to allow normal users to generate fresh
+    Remove any root generated pyc's to allow normal users to generate fresh
     pyc's after any upgrades, helps performance.
 
     args    : kmotion_dir ... the 'root' directory of kmotion

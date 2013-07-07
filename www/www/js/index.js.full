@@ -29,6 +29,7 @@ KM.YELLOW =    '#FFFF00';
 KM.GREEN =     '#00FF00';
 KM.BLUE =      '#0000FF';
 KM.BLACK =     '#000000';
+KM.BAR =       '#9696FF';
 KM.WHITE =     '#FFFFFF';
 KM.GREY	=      '#C1C1C1';
 KM.DARK_GREY = '#818181';
@@ -43,8 +44,6 @@ KM.DISPLAY_LOOP = 4;
 KM.ARCH_LOOP    = 5;
 KM.LOGS         = 6;
 KM.CONFIG_LOOP  = 7;
-KM.CONFIG_SEND  = 8;
-KM.MISC_JUMP    = 9;
 
 KM.server = {
     latest_jpegs:  [],
@@ -66,7 +65,7 @@ KM.session_id = {
     current: 0 // the current 'live' session id, used to kill old sessions
 };
 
-KM.menu_bar_buttons = {	
+KM.menu_bar_buttons	= {	
     function_selected:   0,     // the function selected
     display_sec_enabled: false, // enabled sections ...
     camera_sec_enabled:  false,
@@ -76,29 +75,23 @@ KM.menu_bar_buttons = {
 
 KM.live = {
     last_camera_select: 0, // the last camera selected
-    ptz_feed:           0  // ptz active feed
+    ptz_feed: 0            // ptz active feed
 };
 
 KM.config = {
-    session_id:	     0, // the session id
-    pwd_change: false,  // the password has changed
-    camera:          1, // the current camera
-    mask:           '', // the current expanded mask string
-    ptz_current_x:   0, // calculated abs position
-    ptz_current_y:   0,
-    sched:           1, // the current schedule
-    sched_pastebin: '',
-    error_str:      '', // the error string
-    error_search_str: /failed|error/i,
-    track_coded_str: ''  // temp for coded str
-    
+    session_id:	    0, // the session id
+    pwd_change: false, // the password has changed
+    camera:         0, // the current camera
+    mask:          '', // the current expanded mask string
+    ptz_current_x:  0, // calculated abs position
+    ptz_current_y:  0,
+    error_str:     '', // the error string
+    error_search_str: /failed|error/i
 };
 
 KM.www_rc = {
     // mimics the configuration in 'www_rc'
     feed_enabled:  ['pad', false, false, false, false, false, false, false, 
-    false, false, false, false, false, false, false, false, false], 
-    feed_pal:  ['pad', false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false, false], 
     feed_show_box: ['pad', false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false, false],  
@@ -114,38 +107,17 @@ KM.www_rc = {
     feed_height:   ['pad', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     feed_snap_enabled:   ['pad', false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false, false],
-    feed_smovie_enabled: ['pad', false, false, false, false, false, false, false, 
+    feed_smovie_enabled:  ['pad', false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false, false],
-    feed_movie_enabled:  ['pad', false, false, false, false, false, false, false, 
+    feed_movie_enabled: ['pad', false, false, false, false, false, false, false, 
+    false, false, false, false, false, false, false, false, false],
+    feed_updates: ['pad', false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false, false],
     feed_snap_interval:  ['pad', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    feed_fps:      ['pad', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    feed_fps:     ['pad', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    feed_quality: ['pad', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    feed_kbs:     ['pad', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 
-    // schedule and schedule exception config
-    sched_tline1: ['pad', '', '', '', '', '', '', '', ''],
-    sched_tline2: ['pad', '', '', '', '', '', '', '', ''],
-    sched_tline3: ['pad', '', '', '', '', '', '', '', ''],
-    sched_tline4: ['pad', '', '', '', '', '', '', '', ''],
-    sched_tline5: ['pad', '', '', '', '', '', '', '', ''],
-    sched_tline6: ['pad', '', '', '', '', '', '', '', ''],
-    sched_tline7: ['pad', '', '', '', '', '', '', '', ''],
-    
-    except_tline1_dates: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline2_dates: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline3_dates: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline4_dates: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline5_dates: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline6_dates: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline7_dates: ['pad', '', '', '', '', '', '', '', ''],
-    
-    except_tline1: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline2: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline3: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline4: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline5: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline6: ['pad', '', '', '', '', '', '', '', ''],
-    except_tline7: ['pad', '', '', '', '', '', '', '', ''],
-    
     // PTZ misc config
     ptz_enabled: ['pad', false, false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false],  
@@ -191,8 +163,6 @@ KM.www_rc = {
     config_button_enabled:  true,
     func_button_enabled:    true,
     msg_button_enabled:     true,
-    panic_button_enabled:   true, 
-    audible_button_enabled: true,
     about_button_enabled:   true,
     logout_button_enabled:  true,
 
@@ -241,7 +211,7 @@ KM.timeout_ids = function () {
     // ids are split into 'groups' for up to eight different sections of code.
     
     var timeout_ids = [];
-    for (var i = 0; i < 9; i++) { 
+    for (var i = 0; i < 8; i++) { 
         timeout_ids[i] = [];
     }
 
@@ -419,7 +389,7 @@ KM.load_settings = function (callback) {
 		index = parseInt(par_split[0].substring(3), 10);
 	    } else {
 		key = par_split[0];	// the 3 digit id ie 'fen' or 'fha'
-		index = '';		// optional list pointer for the id
+		index = '';			// optional list pointer for the id
 	    }
 	    var value = par_split[1];
 	
@@ -478,9 +448,6 @@ KM.load_settings = function (callback) {
 		case 'fen': // feed enabled	
 		    KM.www_rc.feed_enabled[index] = (parseInt(value, 10) === 1);
 		    break;
-		case 'fpl': // feed pal	
-		    KM.www_rc.feed_pal[index] = (parseInt(value, 10) === 1);
-		    break;
 		case 'fde': // feed device
 		    KM.www_rc.feed_device[index] = value;
 		    break;
@@ -514,6 +481,12 @@ KM.load_settings = function (callback) {
 		case 'ffp': // feed fps
 		    KM.www_rc.feed_fps[index] = parseInt(value, 10);
 		    break;
+		case 'fqu': // feed quality
+		    KM.www_rc.feed_quality[index] = parseInt(value, 10);
+		    break;
+		case 'fkb': // feed kbs
+		    KM.www_rc.feed_kbs[index] = parseInt(value, 10);
+		    break;
 		case 'fpe': // feed snap enabled
 		    KM.www_rc.feed_snap_enabled[index] = (parseInt(value, 10) === 1);
 		    break;
@@ -525,6 +498,9 @@ KM.load_settings = function (callback) {
 		    break;
 		case 'fme': // feed ffmpeg enabled	
 		    KM.www_rc.feed_movie_enabled[index] = (parseInt(value, 10) === 1);
+		    break;
+		case 'fup': // feed updates
+		    KM.www_rc.feed_updates[index] = (parseInt(value, 10) === 1);
 		    break;
 	    
 		case 'psx': // ptz step x
@@ -581,80 +557,13 @@ KM.load_settings = function (callback) {
 		case 'p4y': // ptz preset 4 y
 		    KM.www_rc.ptz_preset4_y[index] = parseInt(value, 10);
 		    break;
-		    
-		case 'st1': // schedule time line 1
-		    KM.www_rc.sched_tline1[index] = value;
-		    break;
-		case 'st2': // schedule time line 2
-		    KM.www_rc.sched_tline2[index] = value;
-		    break;
-		case 'st3': // schedule time line 3
-		    KM.www_rc.sched_tline3[index] = value;
-		    break;
-		case 'st4': // schedule time line 4
-		    KM.www_rc.sched_tline4[index] = value;
-		    break;
-		case 'st5': // schedule time line 5
-		    KM.www_rc.sched_tline5[index] = value;
-		    break;
-		case 'st6': // schedule time line 6
-		    KM.www_rc.sched_tline6[index] = value;
-		    break;
-		case 'st7': // schedule time line 7
-		    KM.www_rc.sched_tline7[index] = value;
-		    break;
-		    
-		case 'ed1': // exception time line 1 dates
-		    KM.www_rc.except_tline1_dates[index] = value;
-		    break;
-		case 'ed2': // exception time line 2 dates
-		    KM.www_rc.except_tline2_dates[index] = value;
-		    break;
-		case 'ed3': // exception time line 3 dates
-		    KM.www_rc.except_tline3_dates[index] = value;
-		    break;
-		case 'ed4': // exception time line 4 dates
-		    KM.www_rc.except_tline4_dates[index] = value;
-		    break;
-		case 'ed5': // exception time line 5 dates
-		    KM.www_rc.except_tline5_dates[index] = value;
-		    break;
-		case 'ed6': // exception time line 6 dates
-		    KM.www_rc.except_tline6_dates[index] = value;
-		    break;
-		case 'ed7': // exception time line 7 dates
-		    KM.www_rc.except_tline7_dates[index] = value;
-		    break;
-		    
-		case 'et1': // exception time line 1 
-		    KM.www_rc.except_tline1[index] = value;
-		    break;
-		case 'et2': // exception time line 2 
-		    KM.www_rc.except_tline2[index] = value;
-		    break;
-		case 'et3': // exception time line 3 
-		    KM.www_rc.except_tline3[index] = value;
-		    break;
-		case 'et4': // exception time line 4 
-		    KM.www_rc.except_tline4[index] = value;
-		    break;
-		case 'et5': // exception time line 5 
-		    KM.www_rc.except_tline5[index] = value;
-		    break;
-		case 'et6': // exception time line 6 
-		    KM.www_rc.except_tline6[index] = value;
-		    break;
-		case 'et7': // exception time line 7 
-		    KM.www_rc.except_tline7[index] = value;
-		    break;
-		    
+	    
 		case 'dif': // display feeds
 		    var feeds = value.split(",");
 		    for (var j = 0; j < feeds.length; j++) {
 			KM.www_rc.display_cameras[index][j + 1] = parseInt(feeds[j], 10);
 		    }
 		    break;
-		    
 		case 'col': // background color
 		    KM.www_rc.color_select = parseInt(value, 10);
 		    break;	
@@ -674,7 +583,7 @@ KM.load_settings = function (callback) {
 		    break;
 	    }
 	}
-	// finally the callback
+	// finally tha callback
 	callback();
     }
     get_settings(callback);
@@ -1102,8 +1011,7 @@ KM.enable_function_buttons = function (button) {
     
     var buttons = ['pad', 'pad', 'archive_button_enabled', 
     'logs_button_enabled', 'config_button_enabled', 'func_button_enabled', 
-    'msg_button_enabled', 'panic_button_enabled', 'audible_button_enabled', 
-    'about_button_enabled',  'logout_button_enabled'];
+    'about_button_enabled', 'msg_button_enabled', 'logout_button_enabled'];
 
     for (var i = 1; i < buttons.length; i++) {
         if (KM.www_rc[buttons[i]] || i === 1) {
@@ -1272,36 +1180,21 @@ KM.function_button_clicked = function (button) {
 	    KM.disable_ptz_buttons();
 	    break;
     
-	case 6: // 'msg button'	
-	    KM.disable_display_buttons();
-	    KM.disable_camera_buttons();
-	    KM.disable_ptz_buttons();
-	    KM.display_msg();
-	    break;
-    
-	case 7: // 'panic button'
+	case 6: // 'about button'
 	    KM.disable_display_buttons();
 	    KM.disable_camera_buttons();
 	    KM.disable_ptz_buttons();
 	    KM.display_about();
 	    break;
     
-	    
-	case 8: // 'Audible button'
+	case 7: // 'msg button'	
 	    KM.disable_display_buttons();
 	    KM.disable_camera_buttons();
 	    KM.disable_ptz_buttons();
-	    KM.display_about();
+		KM.display_msg();
 	    break;
     
-	case 9: // 'about button'
-	    KM.disable_display_buttons();
-	    KM.disable_camera_buttons();
-	    KM.disable_ptz_buttons();
-	    KM.display_about();
-	    break;
-    
-	case 10: // 'logout button'
+	case 8: // 'logout button'
 	    KM.disable_display_buttons();
 	    KM.disable_camera_buttons();
 	    KM.disable_ptz_buttons();
@@ -1327,8 +1220,7 @@ KM.function_button_valid = function (button) {
     
     var buttons = ['pad', 'pad', 'archive_button_enabled',
         'logs_button_enabled', 'pad', 'func_button_enabled', 
-        'msg_button_enabled', 'panic_button_enabled', 'audible_button_enabled', 
-	'about_button_enabled',  'logout_button_enabled'];
+        'about_button_enabled', 'msg_button_enabled', 'logout_button_enabled'];
     return (button < 2 || button === 4 || KM.www_rc[buttons[button]]);
 };
 
@@ -2876,10 +2768,15 @@ KM.display_archive_ = function () {
 	var left_offset = (KM.browser.main_display_width - backdrop_width) / 2;
 	var dropdown_width = backdrop_width / 4;
 	var button_width =   backdrop_width / 5;
+    
+	// awkward hacks to keep consistant interface across browsers
+	var title_str = 'archive_title_FF';
+	if (KM.browser.browser_OP) title_str = 'archive_title_OP';
+	if (KM.browser.browser_IE) title_str = 'archive_title_IE';
 	
 	document.getElementById('main_display').innerHTML = '' +
 	
-	'<div id="title" style="width:' + backdrop_width + 'px;">' + 
+	'<div id="' + title_str + '" style="width:' + backdrop_width + 'px;">' + 
 	    '<span class="italic">kmotion</span>: Archive ' +
 	    '<span id="config_clock"> - </span>' +
 	'</div>' +
@@ -2929,11 +2826,11 @@ KM.display_archive_ = function () {
 	var tline_html = '';
 	var pos = 0, old_pos = 0;
 	var mins = 0, hours = 0, title = '';
-	var segments = (24 * 60) / 5;
-	var scale = backdrop_width / segments;
+	var blocks = (24 * 60) / 5;
+	var scale = backdrop_width / blocks;
 	var width = 0;
 	
-	for (var i = 1; i < segments + 1; i++) {
+	for (var i = 1; i < blocks + 1; i++) {
 	    pos = Math.round(i * scale);
 	    pos = Math.min(backdrop_width, pos);
 	    width = pos - old_pos;
@@ -4711,7 +4608,7 @@ KM.display_archive_ = function () {
 	//
 	// expects: 
 	//
-	// returns:
+	// return:
     
 	fq_image_name = '/images/ncam.png';
 	var html = '<img src=' + fq_image_name + ' id="image" style="width:100%;height:99%" alt="" />';
@@ -4728,7 +4625,7 @@ KM.display_archive_ = function () {
 	// 'fq_image_name' ... the fully qualified image name
 	// 'callback'      ... the function to be called on completion.
 	//
-	// returns:
+	// return:
 	// 'bool'          ... cache successful
     
 	cache_ptr++; // caching fq_image_names as a browser workaround
@@ -4994,24 +4891,27 @@ KM.display_logs = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.session_id.current++;
     var session_id = KM.session_id.current;
     
+    // awkward hacks to keep consistant interface across browsers
+    var title_str = 'title_FF';
+    if (KM.browser.browser_OP) title_str = 'title_OP';
+    if (KM.browser.browser_IE) title_str = 'title_IE';
+    
     document.getElementById('main_display').innerHTML = '' +
-    
-    '<div class="title" style="width: 992px;">' + 
-	'kmotion: Logs' +
+    '<div id="' + title_str + '">' +
+        '<span class="italic">kmotion</span>: Logs' +
     '</div>' +
-    
     '<div class="divider">' +
-        '<img src="images/logs_divider_color.png" alt="" >' + 
+        '<img src="images/divider_xl.png" alt="" />' + 
     '</div>' +
     
     '<div class="logs_backdrop" id="logs_html">' +
-    '<p style="text-align: center">Downloading Logs ...</p>' +
+    '<p style="text-align: center">... downloading data ...</p>' +
     '</div>';
     
     function show_logs(dblob) {
@@ -5081,35 +4981,7 @@ Main display - Config - Misc code
 Miscellaneous code that provides general closures and functions for config
 **************************************************************************** */
 
-
-KM.conf_config_track_send = function() {  
-
-    // A function that sends the coded string generated by 'conf_config_track()'
-    // via a xmlHttp request back to the server, this is called by a 
-    // 'add_timeout_id()' call instead of being in line to avoid rapid 
-    // selections killing this transmission.
-    //
-    // expects:
-    //
-    // returns:
-    //
-    
-    var coded_str = KM.config.track_coded_str;
-    var coded_len = coded_str.length;
-    var zero_pad = '00000000'.substring(0, 8 - (coded_len + '').length);
-    coded_str += '$chk:' + zero_pad + coded_len;
-    if (coded_len !== 0) { // ie empty string 
-	var xmlHttp = KM.get_xmlHttp_obj();
-	xmlHttp.open('POST', '/cgi_bin/xmlHttp_settings_wr.py'); 
-	xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xmlHttp.setRequestHeader("Content-length", coded_str.length);
-	xmlHttp.setRequestHeader("Connection", "close");  
-	xmlHttp.send('dblob=' + coded_str);
-	KM.kill_timeout_ids(KM.CONFIG_SEND);
-    }
-};
-	  
-    
+   
 KM.conf_config_track = function() {
 
     // A closure that tracks changes to the local config and when needed 
@@ -5124,7 +4996,7 @@ KM.conf_config_track = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
 
     var misc_modified =       false;
@@ -5138,18 +5010,15 @@ KM.conf_config_track = function() {
         false, false, false, false, false, false, false, false, false, false, false];
     var ptz_en_tt_modified =  ['pad', false, false, false, false, false, 
         false, false, false, false, false, false, false, false, false, false, false];
-    var sched_modified =      ['pad', false, false, false, false, false, 
-        false, false, false];
-    var except_modified =     ['pad', false, false, false, false];
+    var warning_msg = false;
 
     var coded_str = '';
 
     function bool_num(flag) {
-	// convert bool to number
         if (flag) return 1;
         return 0;
-    };
-      
+    }
+
     return {
     
 	// the misc config screen has been modified
@@ -5167,34 +5036,27 @@ KM.conf_config_track = function() {
 	    display_modified = true;
 	},
     
-	// the feeds has been modified
+	// the feed has been modified
 	feed_modified: function(i) {
 	    feed_modified[i] = true;
+	    warning_msg = true; 
 	},
     
-	// the feeds masks have been modified
+	// the feed mask has been modified
 	mask_modified: function(i) {
 	    mask_modified[i] = true;
+	    warning_msg = true; 
 	},		
     
-	// the ptz enable or track types have been modified
+	// the ptz enable or track type have been modified
 	ptz_en_tt_modified: function(i) {
 	    ptz_en_tt_modified[i] = true; 
+	    warning_msg = true; 
 	},
     
 	// the ptz misc options have been modified
 	ptz_misc_modified: function(i) {
 	    ptz_misc_modified[i] = true;
-	},
-	
-	// the schedules have been modified
-	sched_modified: function(i) {
-	    sched_modified[i] = true;
-	},
-	
-	// the schedule exceptions have been modified
-	except_modified: function(i) {
-	    except_modified[i] = true;
 	},
     
 	reset: function() {
@@ -5208,10 +5070,8 @@ KM.conf_config_track = function() {
 	    false, false, false, false, false, false, false, false, false, false, false];
 	    ptz_en_tt_modified =  ['pad', false, false, false, false, false, 
 	    false, false, false, false, false, false, false, false, false, false, false];
-	    sched_modified =      ['pad', false, false, false, false, false, 
-            false, false, false];
-	    except_modified =     ['pad', false, false, false, false];
 	    display_modified =    false; // the 'display select' and color theme
+	    warning_msg = false;
 	    coded_str = '';
 	},
     
@@ -5262,8 +5122,6 @@ KM.conf_config_track = function() {
 		if (feed_modified[i] === true) {
 		    // feed enabled
 		    coded_str += '$fen' + i + ':' + bool_num(KM.www_rc.feed_enabled[KM.config.camera]);
-		    // feed pal
-		    coded_str += '$fpl' + i + ':' + bool_num(KM.www_rc.feed_pal[KM.config.camera]);
 		    // feed device
 		    coded_str += '$fde' + i + ':' + KM.www_rc.feed_device[KM.config.camera];
 		    // feed input
@@ -5286,6 +5144,10 @@ KM.conf_config_track = function() {
 		    coded_str += '$fbo' + i + ':' + bool_num(KM.www_rc.feed_show_box[KM.config.camera]);
 		    // feed fps 
 		    coded_str += '$ffp' + i + ':' + KM.www_rc.feed_fps[KM.config.camera];
+		    // feed quality
+		    coded_str += '$fqu' + i + ':' + KM.www_rc.feed_quality[KM.config.camera];
+		    // feed kbs
+		    coded_str += '$fkb' + i + ':' + KM.www_rc.feed_kbs[KM.config.camera];
 		    // feed snap enabled
 		    coded_str += '$fpe' + i + ':' + bool_num(KM.www_rc.feed_snap_enabled[KM.config.camera]); 
 		    // feed snap interval
@@ -5294,6 +5156,8 @@ KM.conf_config_track = function() {
 		    coded_str += '$ffe' + i + ':' + bool_num(KM.www_rc.feed_smovie_enabled[KM.config.camera]); 
 		    // feed ffmpeg enabled
 		    coded_str += '$fme' + i + ':' + bool_num(KM.www_rc.feed_movie_enabled[KM.config.camera]); 
+		    // feed ffmpeg updates 
+		    coded_str += '$fup' + i + ':' + bool_num(KM.www_rc.feed_updates[KM.config.camera]); 
 		}
 	    }
 	
@@ -5354,72 +5218,25 @@ KM.conf_config_track = function() {
 		    coded_str += '$p4y' + i + ':' + KM.www_rc.ptz_preset4_y[i];
 		}
 	    }
-	    
-	    for (var i = 1; i < 8; i++) {
-		if (ptz_misc_modified[i] === true) {
-		    // ptz step x
-		    coded_str += '$psx' + i + ':' + KM.www_rc.ptz_step_x[i];
-		    // ptz step y
-		    coded_str += '$psy' + i + ':' + KM.www_rc.ptz_step_y[i];
-		}
+	
+	    var coded_len = coded_str.length;
+	    var zero_pad = '00000000'.substring(0, 8 - (coded_len + '').length);
+	    coded_str += '$chk:' + zero_pad + coded_len;
+	    if (coded_len !== 0) { // ie empty string 
+		var xmlHttp = KM.get_xmlHttp_obj();
+		xmlHttp.open('POST', '/cgi_bin/xmlHttp_settings_wr.py'); 
+		xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xmlHttp.setRequestHeader("Content-length", coded_str.length);
+		xmlHttp.setRequestHeader("Connection", "close");  
+		xmlHttp.send('dblob=' + coded_str);
 	    }
 	    
-	    for (var i = 1; i < 9; i++) {
-		if (sched_modified[i] === true) {
-		    // schedule time line 1
-		    coded_str += '$st1' + i + ':' + KM.www_rc.sched_tline1[i];
-		    // schedule time line 2
-		    coded_str += '$st2' + i + ':' + KM.www_rc.sched_tline2[i];
-		    // schedule time line 3
-		    coded_str += '$st3' + i + ':' + KM.www_rc.sched_tline3[i];
-		    // schedule time line 4
-		    coded_str += '$st4' + i + ':' + KM.www_rc.sched_tline4[i];
-		    // schedule time line 5
-		    coded_str += '$st5' + i + ':' + KM.www_rc.sched_tline5[i];
-		    // schedule time line 6
-		    coded_str += '$st6' + i + ':' + KM.www_rc.sched_tline6[i];
-		    // schedule time line 7
-		    coded_str += '$st7' + i + ':' + KM.www_rc.sched_tline7[i];
-		}
-	    }
-		  
-	    for (var i = 1; i < 4; i++) {
-		if (except_modified[i] === true) {
-		    // exception time line 1 dates
-		    coded_str += '$ed1' + i + ':' + KM.www_rc.except_tline1_dates[i];
-		    // exception time line 2 dates
-		    coded_str += '$ed2' + i + ':' + KM.www_rc.except_tline2_dates[i];
-		    // exception time line 3 dates
-		    coded_str += '$ed3' + i + ':' + KM.www_rc.except_tline3_dates[i];
-		    // exception time line 4 dates
-		    coded_str += '$ed4' + i + ':' + KM.www_rc.except_tline4_dates[i];
-		    // exception time line 5 dates
-		    coded_str += '$ed5' + i + ':' + KM.www_rc.except_tline5_dates[i];
-		    // exception time line 6 dates
-		    coded_str += '$ed6' + i + ':' + KM.www_rc.except_tline6_dates[i];
-		    // exception time line 7 dates
-		    coded_str += '$ed7' + i + ':' + KM.www_rc.except_tline7_dates[i];
-		
-		    // exception time line 1 
-		    coded_str += '$et1' + i + ':' + KM.www_rc.except_tline1[i];
-		    // exception time line 2 
-		    coded_str += '$et2' + i + ':' + KM.www_rc.except_tline2[i];
-		    // exception time line 3 
-		    coded_str += '$et3' + i + ':' + KM.www_rc.except_tline3[i];
-		    // exception time line 4 
-		    coded_str += '$et4' + i + ':' + KM.www_rc.except_tline4[i];
-		    // exception time line 5 
-		    coded_str += '$et5' + i + ':' + KM.www_rc.except_tline5[i];
-		    // exception time line 6 
-		    coded_str += '$et6' + i + ':' + KM.www_rc.except_tline6[i];
-		    // exception time line 7 
-		    coded_str += '$et7' + i + ':' + KM.www_rc.except_tline7[i];
-		}
-	    }
-	      
-	    KM.config.track_coded_str = coded_str;
-	    KM.add_timeout_id(KM.CONFIG_SEND, setTimeout(function () {KM.conf_config_track_send(); }, 1));
+	    if (warning_msg) {
+	    alert('The current synchronisation with the remote server\n\
+involves reloading of the motion daemon configuration.\n\nDuring the reload \
+kmotion will experience temporary\nvideo freezing.');
 	    KM.conf_config_track.reset();
+	    }
 	}
     }
 }();
@@ -5433,7 +5250,7 @@ KM.conf_error_daemon = function (session_id) {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
 
     KM.add_timeout_id(KM.ERROR_DAEMON, setTimeout(function () {reload(); }, 1));
@@ -5498,7 +5315,7 @@ KM.display_config = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
 
     if (KM.www_rc.secure) {
@@ -5515,7 +5332,7 @@ KM.conf_loggin_html = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.session_id.current++;
@@ -5554,7 +5371,7 @@ KM.conf_login_validate_pw = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     if (KM.config_misc_hash_pw(document.login.password.value) === KM.www_rc.config_hash) {
@@ -5572,115 +5389,58 @@ KM.conf_backdrop_html = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.session_id.current++;
-    var button_width = 141;
-    
-    document.body.style.backgroundColor = KM.WHITE;
+    var button_width = 197;
+    // awkward hacks to keep consistant interface across browsers
+    var title_str = 'title_FF';
+    if (KM.browser.browser_OP) title_str = 'title_OP';
+    if (KM.browser.browser_IE) title_str = 'title_IE';
+
+    var height_str = 'height:22px;';
+    if (KM.browser.browser_FF) height_str = '';
+
     document.getElementById('main_display').innerHTML = '' +
-    
-    '<div class="title" style="width: 992px;">' + 
-	'kmotion Config : ' +
-	'<span id="update"></span>' +
+    '<div id="' + title_str + '">' +
+        '<span class="italic">kmotion</span>: Config' +
     '</div>' +
-    
     '<div class="divider">' +
-        '<img src="images/config_divider_color.png" alt="" >' + 
+        '<img src="images/divider_xl.png" alt="" />' + 
     '</div>' +
-    
-    '<div class="config_backdrop" >' +
-	'<div id="config_bar" class="config_button_bar" style="padding-top:1px;" >' +
-	
-	    '<input type="button" value="Misc" id="ptz_button" onclick="KM.conf_misc_html()" '+ 
-	    'style="width:' + button_width + 'px;"/>' +
-	    '<input type="button" value="Cameras" id="ptz_button" onclick="KM.conf_feed_html()" '+ 
-	    'style="width:' + button_width + 'px;"/>' +
-	    '<input type="button" value="PTZ" id="ptz_button" onclick="KM.conf_ptz_html()" '+ 
-	    'style="width:' + button_width + 'px;"/>' +
-	    '<input type="button" value="Schedules" id="ptz_button" onclick="KM.conf_schedule_html()" '+ 
-	    'style="width:' + button_width + 'px;"/>' +
-	    '<input type="button" value="Themes" id="ptz_button" onclick="KM.conf_theme_html()" '+ 
-	    'style="width:' + button_width + 'px;"/>' +
-	    '<input type="button" value="Motion Errors" id="error_button" onclick="KM.conf_select_errors();" ' +
-	    'style="width:' + button_width + 'px;"/>' +
-	    '<input type="button" value="Server Load" onclick="KM.conf_select_load();" ' +
-	    'style="width:' + button_width + 'px;"/>' +
-	    
-	'</div>' +
-	
-	'<div id="config_html">' +
-	'</div>' +
-	
+    '<div id="config_bar" class="config_bar">' +
+        '<form name="config" action="" onsubmit="return false">' +
+            '<select id="config_select" onchange="KM.conf_select_config();" onclick="KM.conf_select_config();" ' +
+	    'style="width:' + button_width + 'px; ' + height_str + '">' +
+                '<option>Misc Config</option>' +	
+                '<option>Camera 1</option>' +	
+                '<option>Camera 2</option>' +	
+                '<option>Camera 3</option>' +	
+                '<option>Camera 4</option>' +	
+                '<option>Camera 5</option>' +	
+                '<option>Camera 6</option>' +	
+                '<option>Camera 7</option>' +	
+                '<option>Camera 8</option>' +	
+                '<option>Camera 9</option>' +	
+                '<option>Camera 10</option>' +	
+                '<option>Camera 11</option>' +	
+                '<option>Camera 12</option>' +	
+                '<option>Camera 13</option>' +	
+                '<option>Camera 14</option>' +	
+                '<option>Camera 15</option>' +
+                '<option>Camera 16</option>' +	
+            '</select>' +
+            '<input type="button" value="PT(Z)" id="ptz_button" onclick="KM.conf_select_ptz()" '+ 
+            'style="width:' + button_width + 'px; ' + height_str + '" disabled />' +
+            '<input type="button" value="Motion Errors" id="error_button" onclick="KM.conf_select_errors();" ' +
+            'style="width:' + button_width + 'px; ' + height_str +'" disabled/>' +
+            '<input type="button" value="Server Load" onclick="KM.conf_select_load();" ' +
+            'style="width:' + button_width + 'px; ' + height_str + '"/>' +
+        '</form>' +
+    '</div>' +
+    '<div class="config_backdrop" id="config_html">' +
     '</div>';
-    
-    if (KM.www_rc.version_latest === 'failed_parse') {
-        document.getElementById('update').innerHTML = 'Connecting to update server ...';
-        document.getElementById('update').style.color = KM.YELLOW;
-	
-    } else if (KM.www_rc.version_latest === 'SVN') {
-        document.getElementById('update').innerHTML = 'Execute \'svn update\' for latest build.';
-        document.getElementById('update').style.color = KM.RED;
-	
-    } else if (KM.www_rc.version === KM.www_rc.version_latest) {
-        document.getElementById('update').innerHTML = 'No updates avaliable.';
-        document.getElementById('update').style.color = KM.GREY;
-	
-    } else {
-        document.getElementById('update').innerHTML = 'Version ' + KM.www_rc.version_latest + ' is now avaliable.';
-        document.getElementById('update').style.color = KM.RED;
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //'<div id="config_bar" class="config_bar">' +
-        //'<form name="config" action="" onsubmit="return false">' +
-            //'<select id="config_select" onchange="KM.conf_select_config();" onclick="KM.conf_select_config();" ' +
-	    //'style="width:' + button_width + 'px; ' + height_str + '">' +
-                //'<option>Misc Config</option>' +	
-                //'<option>Camera 1</option>' +	
-                //'<option>Camera 2</option>' +	
-                //'<option>Camera 3</option>' +	
-                //'<option>Camera 4</option>' +	
-                //'<option>Camera 5</option>' +	
-                //'<option>Camera 6</option>' +	
-                //'<option>Camera 7</option>' +	
-                //'<option>Camera 8</option>' +	
-                //'<option>Camera 9</option>' +	
-                //'<option>Camera 10</option>' +	
-                //'<option>Camera 11</option>' +	
-                //'<option>Camera 12</option>' +	
-                //'<option>Camera 13</option>' +	
-                //'<option>Camera 14</option>' +	
-                //'<option>Camera 15</option>' +
-                //'<option>Camera 16</option>' +	
-            //'</select>' +
-            //'<input type="button" value="PT(Z)" id="ptz_button" onclick="KM.conf_ptz_html()" '+ 
-            //'style="width:' + button_width + 'px; ' + height_str + '" disabled />' +
-            //'<input type="button" value="Motion Errors" id="error_button" onclick="KM.conf_select_errors();" ' +
-            //'style="width:' + button_width + 'px; ' + height_str +'" disabled/>' +
-            //'<input type="button" value="Server Load" onclick="KM.conf_select_load();" ' +
-            //'style="width:' + button_width + 'px; ' + height_str + '"/>' +
-        //'</form>' +
-    //'</div>' +
-    //'<div class="config_backdrop" id="config_html">' +
-    //'</div>';
-    
-    
-    
-    
-    
-    
     KM.conf_misc_html();
 };
 
@@ -5691,7 +5451,7 @@ KM.conf_highlight_error_button = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     document.getElementById('error_button').style.fontWeight = 'bold';
@@ -5706,7 +5466,7 @@ KM.conf_disable_error_button = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     document.getElementById('error_button').style.fontWeight = 'normal';
@@ -5716,34 +5476,34 @@ KM.conf_disable_error_button = function () {
 };
 
 
-//KM.conf_select_config = function() {
+KM.conf_select_config = function() {
 
-    //// A function that is executed when config 'misc' or 'camera' is selected
-    ////
-    //// expects:
-    ////
-    //// returns:
-    ////
+    // A function that is executed when config 'misc' or 'camera' is selected
+    //
+    // expects:
+    //
+    // return:
+    //
     
-    //KM.session_id.current++;
-    //KM.conf_error_daemon(KM.session_id.current);
-    //KM.config.camera = document.getElementById('config_select').selectedIndex;
-    //document.getElementById('ptz_button').disabled = true;
-    //if (KM.config.camera === 0) {
-	//KM.conf_misc_html();
-    //} else {
-	//KM.conf_feed_html(KM.config.camera);
-    //}
-//};
+    KM.session_id.current++;
+    KM.conf_error_daemon(KM.session_id.current);
+    KM.config.camera = document.getElementById('config_select').selectedIndex;
+    document.getElementById('ptz_button').disabled = true;
+    if (KM.config.camera === 0) {
+	KM.conf_misc_html();
+    } else {
+	KM.conf_feed_html(KM.config.camera);
+    }
+};
 
 
-KM.conf_ptz = function() {
+KM.conf_select_ptz = function() {
 
     // A function that is executed when the 'ptz' button is clicked
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.session_id.current++;
@@ -5758,7 +5518,7 @@ KM.conf_select_errors = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.session_id.current++;
@@ -5773,7 +5533,7 @@ KM.conf_select_load = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.session_id.current++;
@@ -5802,126 +5562,125 @@ KM.conf_misc_html = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     document.getElementById('config_html').innerHTML = '<br>' +
 
-    '<div class="config_tick_margin">' +	
+    '<div class="config_button">' +
+        'Auto software check : ' + 
+        '<span id="misc_version"></span>' +
+    '</div>' +
+    
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
+    '</div>' +
+    
+    '<div class="config_tick_box margin_top_4px">' +	
         '<input type="checkbox" id="misc_inter" onClick ="KM.conf_misc_highlight_apply();">' +
         'Interleave mode. Gives preference to cameras where motion has been detected.' + 
     '</div><br>' +
 
-    '<div class="config_tick_margin">' +	
+    '<div class="config_tick_box">' +	
         '<input type="checkbox" id="misc_full" onClick ="KM.conf_misc_force_inter();">' +
         'Full screen mode. Changes to full screen mode when motion has been detected.' + 
     '</div><br>' +
 
-    '<div class="config_tick_margin">' +	
+    '<div class="config_tick_box">' +	
         '<input type="checkbox" id="misc_low_bw" onClick ="KM.conf_misc_force_inter();">' +
         'Low bandwidth mode. Update \'no motion\' cameras every 15 mins.' + 
     '</div><br>' +
 
-    '<div class="config_tick_margin">' +	
+    '<div class="config_tick_box">' +	
         '<input type="checkbox" id="misc_low_cpu" onClick ="KM.conf_misc_highlight_apply();">' +
         'Low CPU mode. Reduce browser CPU usage by capping update frequency.' + 
     '</div><br>' +
     
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
     '<div style="float:left; width:45%;">' +
-        '<div>' +
-	    '<div class="config_group_margin">' +	
+        '<div class="margin_top_4px">' +
+	    '<div class="config_tick_box">' +	
 		'<input type="checkbox" id="misc_live" checked disabled>' +
 		'Live button enabled.' + 
-	    '</div>' +
+	    '</div><br>' +
     
-	    '<div class="config_group_margin">' +	
+	    '<div class="config_tick_box">' +	
 		'<input type="checkbox" id="misc_logs" onClick ="KM.conf_misc_highlight_apply();">' +
 		'Logs button enabled.' + 
-	    '</div>' +
+	    '</div><br>' +
 	
-	    '<div class="config_group_margin">' +	
+	    '<div class="config_tick_box">' +	
 		'<input type="checkbox" id="misc_func" onClick ="KM.conf_misc_highlight_apply();">' +
 		'Func button enabled.' + 
-	    '</div>'+
-	    
-	    '<div class="config_group_margin">' +	
-		'<input type="checkbox" id="misc_aboutxx" onClick ="KM.conf_misc_highlight_apply();">' +
-		'Panic button enabled.' + 
-	    '</div>' +
+	    '</div><br>'+
 	
-	    '<div class="config_group_margin">' +	
+	    '<div class="config_tick_box">' +	
 		'<input type="checkbox" id="misc_msg" onClick ="KM.conf_misc_highlight_apply();">' +
 		'Msg button enabled.' + 
 	    '</div>' +
 	'</div>' +
     '</div>' +
 
-    '<div>' +
-        '<div class="config_group_margin">' +	
+    '<div class="margin_top_4px">' +
+        '<div class="config_tick_box">' +	
             '<input type="checkbox" id="misc_archive" onClick ="KM.conf_misc_highlight_apply();">' +
             'Archive button enabled.' + 
-        '</div>'+
+        '</div><br>'+
 
-	'<div class="config_group_margin">' +	
+	'<div class="config_tick_box">' +	
 	    '<input type="checkbox" id="misc_config" onClick ="KM.conf_misc_highlight_apply();">' +
 	    'Config button enabled.' + 
-	'</div>' +
+	'</div><br>' +
 	
-	'<div class="config_group_margin">' +	
+	'<div class="config_tick_box">' +	
 	    '<input type="checkbox" id="misc_about" onClick ="KM.conf_misc_highlight_apply();">' +
-	    'About button enabled.' + 
-	'</div>' +
+	    'About button enabled.&nbsp;' + 
+	'</div><br>' +
 	
-	'<div class="config_group_margin">' +	
-	    '<input type="checkbox" id="misc_aboutxx" onClick ="KM.conf_misc_highlight_apply();">' +
-	    'Audible button enabled.' + 
-	'</div>' +
-	
-	'<div class="config_group_margin">' +	
+	'<div class="config_tick_box">' +	
 	    '<input type="checkbox" id="misc_logout" onClick ="KM.conf_misc_highlight_apply();">' +
 	    'Logout button enabled.' + 
 	'</div>' +
     '</div>' +
     
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_tick_margin">' +	
+    '<div class="config_tick_box margin_top_4px">' +	
         '<input type="checkbox" id="misc_skip_frames" onClick ="KM.conf_misc_highlight_apply();">' +
         'Enable archive playback acceleration by skipping frames. (may miss events)' + 
     '</div><br>' +
 
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_tick_margin">' +	
+    '<div class="config_tick_box margin_top_4px">' +	
         '<input type="checkbox" id="misc_save" onClick ="KM.conf_misc_save_display();">' +
-        'Save the current \'Display Select\' configuration as default.' + 
+        'Save the current \'Display Select\' configuration and current style as defaults.' + 
     '</div><br>' +
 
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
-    
-    '<div class="config_tick_margin">' +	
+
+    '<div class="config_tick_box margin_top_4px">' +	
         '<input type="checkbox" id="misc_secure" onClick ="KM.conf_misc_highlight_apply();">' +
         'Enable security login screen. ' + 
         'New password : ' +
-        '<input type="password" id="misc_pw" size="40" >&nbsp;' +
+        '<input type="password" id="misc_pw" size="20" >&nbsp;' +
         '<input type="button" onclick="KM.conf_misc_save_pw();" value="Submit"> ' +	
     '</div>' +
 
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_text_margin" id="conf_text" style="margin-top:233px;">' +
+    '<div class="config_button margin_top_4px" id="conf_text">' +
         '<input type="button" id="conf_apply" OnClick="KM.conf_misc_apply();" value="Apply"> ' +
         'all changes to the local browser configuration and sync with the remote server.' +
     '</div>';
@@ -5946,6 +5705,23 @@ KM.conf_misc_html = function() {
     document.getElementById('misc_about').checked = KM.www_rc.about_button_enabled;
     document.getElementById('misc_logout').checked = KM.www_rc.logout_button_enabled;
     document.getElementById('misc_secure').checked = KM.www_rc.secure;
+
+    if (KM.www_rc.version_latest === 'failed_parse') {
+        document.getElementById('misc_version').innerHTML = 'CONNECTING TO UPDATE SERVER ...';
+        document.getElementById('misc_version').style.color = KM.YELLOW;
+	
+    } else if (KM.www_rc.version_latest === 'SVN') {
+        document.getElementById('misc_version').innerHTML = 'SVN VERSION - SVN UPDATE FOR LATEST BUILD';
+        document.getElementById('misc_version').style.color = KM.RED;
+	
+    } else if (KM.www_rc.version === KM.www_rc.version_latest) {
+        document.getElementById('misc_version').innerHTML = 'NO UPDATES AVALIABLE.';
+        //document.getElementById('misc_version').style.color = KM.GREY;
+	
+    } else {
+        document.getElementById('misc_version').innerHTML = 'VERSION ' + KM.www_rc.version_latest + ' IS NOW AVALIABLE FOR DOWNLOAD.';
+        document.getElementById('misc_version').style.color = KM.RED;
+    }
 };
 
 
@@ -5956,7 +5732,7 @@ KM.conf_misc_force_inter = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     if (!document.getElementById('misc_low_bw').checked && 
@@ -5976,7 +5752,7 @@ KM.conf_misc_save_display = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.conf_config_track.display_modified();
@@ -5990,7 +5766,7 @@ KM.conf_misc_save_pw = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.config.pwd_changed = true;
@@ -6005,7 +5781,7 @@ KM.conf_misc_highlight_apply = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     document.getElementById('conf_apply').style.fontWeight = 'bold';
@@ -6020,7 +5796,7 @@ KM.conf_misc_apply = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.www_rc.interleave = document.getElementById('misc_inter').checked;
@@ -6058,7 +5834,7 @@ KM.config_misc_hash_pw = function(text) {
     // expects:
     // 'text'  ... the password to be hashed
     //
-    // returns:
+    // return:
     // 'hash' ... the hash
     //
     
@@ -6078,27 +5854,26 @@ Displays and processes the feed config screens
 **************************************************************************** */
 
 
-KM.conf_feed_html = function () {
+KM.conf_feed_html = function(camera) {
 
     // A function that generates the feed config HTML. It create the feed 
     // config screen on the config backdrop 'slab'. The mask selecting 
-    // interface was difficult to implement. 225 transparent .svg's are added 
+    // interface was difficult to implement. 100 transparent .png's are added 
     // to the top LHS of the screen then moved into position with javascript. 
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
-    KM.kill_timeout_ids(KM.MISC_JUMP);
-    var image_width = 345;
-    var image_height = 255;
+    var image_width = 340;
+    var image_height = 250;
     
     var mask = '';
-    var mask_width = image_width / 15;
-    var mask_height = image_height / 15;
+    var mask_width = image_width / 10;
+    var mask_height = image_height / 10;
     var html_str = '';
-    for (var i = 1; i < 226; i++) {
+    for (var i = 1; i < 101; i++) {
         html_str += '<div id="mask_' + i + '" style="position:absolute; left:10px; top:10px;">' +
         '<img id="mask_img_' + i + '" style="width:' + mask_width + 'px; height:' + mask_height + 'px;"' +
         'onclick="KM.conf_toggle_feed_mask(' + i + ');" ' + 
@@ -6107,73 +5882,35 @@ KM.conf_feed_html = function () {
     }
 
     html_str += '<br>' +
-    
-    '<div style="float:left; width:370px;">' +
-        '<div class="config_margin_left_20px">' + 
+
+    '<div style="float:left; width:360px;">' +
+        '<div class="margin_left_20px">' + 
             '<img id="image" ' +
             'style="width: ' + image_width + 'px; height: ' + image_height + 
-            'px;" src="images/gcam.png" alt=""> ' +
-	
-            '<input type="button" id="mask_all" style="width:115px;"' +
-            'OnClick="KM.conf_feed_mask_button(1);" value="Mask All" disabled>' +
-            '<input type="button" id="mask_invert" style="width:115px;" ' +
-            'OnClick="KM.conf_feed_mask_button(2);" value="Mask Invert" disabled>' +
-            '<input type="button" id="mask_none" style="width:115px;" ' +
-            'OnClick="KM.conf_feed_mask_button(3);" value="Mask None" disabled>' +
+            'px;" src="images/gcam.png" alt=""> ' +	
         '</div>' +
     '</div>' +
-    
-     '<div style="width:140px;" class="config_text_margin">' +
-        '<select id="feed_camera" onchange="KM.conf_feed_change();">' +
-            '<option value="1">Camera 1</option>' +	
-            '<option value="2">Camera 2</option>' +	
-            '<option value="3">Camera 3</option>' +	
-            '<option value="4">Camera 4</option>' +	
-            '<option value="5">Camera 5</option>' +	
-            '<option value="6">Camera 6</option>' +	
-            '<option value="7">Camera 7</option>' +	
-            '<option value="8">Camera 8</option>' +	
-            '<option value="9">Camera 9</option>' +	
-            '<option value="10">Camera 10</option>' +	
-            '<option value="11">Camera 11</option>' +	
-            '<option value="12">Camera 12</option>' +	
-            '<option value="13">Camera 13</option>' +	
-            '<option value="14">Camera 14</option>' +	
-            '<option value="15">Camera 15</option>' +	
-            '<option value="16">Camera 16</option>' +			
-        '</select>' +
-    '</div>' +
 
-    '<div class="config_tick_margin" style="width:160px;">' +	
+    '<div class="config_tick_box">' +	
         '<input type="checkbox" id="feed_enabled" onclick="KM.conf_feed_enabled();">' +
         'Enable camera' + 
-    '</div>' +	
-    
-    '<div class="config_text_margin disabled" id="feed_text_1" style="width:120px;">' +	
-        '<input type="checkbox" id="feed_pal_enabled" onclick="KM.conf_feed_pal_selected();" disabled>' +
-        'PAL' + 	
-    '</div>' +	
-    
-    '<div class="config_text_margin disabled" id="feed_text_2">' +
-        '<input type="checkbox" id="feed_ntsc_enabled" onclick="KM.conf_feed_ntsc_selected();" disabled>' +
-        'NTSC' + 	
     '</div>' +
-    
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_small.png" alt="" >' + 
+
+    '<div class="divider">' +
+        '<img src="images/config_divider.png" alt="" >' + 
     '</div>' +
-    
-    '<div style="float:left; width:75px;" class="config_text_margin disabled" id="feed_text_3">' +
-        '<span style="margin-top:4px;">Device&nbsp;:</span><br>' +
-        '<div style="margin-top:6px;"></div>' +
+
+    '<div style="float:left; width:75px;" class="config_text disabled margin_top_4px" id="feed_text_1">' +
+        '<span class="margin_top_3px">Device&nbsp;:</span><br>' +
+        '<div class="margin_top_3px"></div>' +
         'URL&nbsp;:<br>' +
-        '<div style="margin-top:6px;"></div>' +
+        '<div class="margin_top_3px"></div>' +
         'Name&nbsp;:<br>' +
-        '<div style="margin-top:6px;"></div>' +
+        '<div class="margin_top_3px"></div>' +
         'Width&nbsp;:<br>' +
     '</div>' +
 
-    '<div style="width:190px;" class="config_text">' +
+    '<div style="float:left; width:110px;" class="config_text_basic margin_top_4px">' +
         '<select id="feed_device" onchange="KM.conf_feed_net_highlight();" disabled>' +
             '<option value="0">/dev/video0</option>' +	
             '<option value="1">/dev/video1</option>' +	
@@ -6190,27 +5927,27 @@ KM.conf_feed_html = function () {
             '<option value="12">/dev/video12</option>' +	
             '<option value="13">/dev/video13</option>' +	
             '<option value="14">/dev/video14</option>' +	
-            '<option value="15">/dev/video15</option>' +	
+            '<option value="15">/dev/video15&nbsp;</option>' +	
             '<option value="URL http://">Network Cam</option>' +	
         '</select>' +
-        '<input type="text" id="feed_url" style="width: 190px; height: 15px; margin-left: 1px; margin-top:1px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-        '<input type="text" id="feed_lgn_name" style="width: 190px; height: 15px; margin-left: 1px; margin-top:1px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-        '<input type="text" id="feed_width" size="4" style="margin-top:1px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-        '<span id="feed_text_4">&nbsp;px</span>' +
+        '<input type="text" id="feed_url" style="width: 120px; height: 15px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+        '<input type="text" id="feed_lgn_name" style="width: 120px; height: 15px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+        '<input type="text" id="feed_width" size="4" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+        ' px' +
     '</div>' +
 
-    '<div style="float:left; width:100px;" class="config_text_margin disabled" id="feed_text_5">' +
+    '<div style="float:left; width:75px;" class="config_text disabled margin_top_4px" id="feed_text_2">' +
         'Input&nbsp;:<br>' +
-        '<div style="margin-top:6px;"></div>' +
+        '<div class="margin_top_3px"></div>' +
         'Proxy&nbsp;:<br>' +
-        '<div style="margin-top:6px;"></div>' +
-        'Password&nbsp;:<br>' +
-        '<div style="margin-top:6px;"></div>' +
+        '<div class="margin_top_3px"></div>' +
+        'Pass&nbsp;:<br>' +
+        '<div class="margin_top_3px"></div>' +
         'Height&nbsp;:<br>' +
     '</div>' +
 
     // 'float:left' here to enable pixel perfect alignment; aka a bodge !
-    '<div style="float:left; width:100px;" class="config_text_basic">' +
+    '<div style="float:left; width:100px;" class="config_text_basic margin_top_4px">' +
 
     '<select id="feed_input" onchange="KM.conf_feed_highlight_apply();" disabled>' +
         '<option value="0">0</option>' +	
@@ -6221,146 +5958,90 @@ KM.conf_feed_html = function () {
         '<option value="5">5</option>' +	
         '<option value="6">6</option>' +	
         '<option value="7">7</option>' +	
-        '<option value="8">N/A</option>' +	
+        '<option value="8">-&nbsp;&nbsp;</option>' +	
     '</select><br>' +
-    '<input type="text" id="feed_proxy" style="width: 190px; height: 15px; margin-left: 1px; margin-top:1px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-    '<input type="password" id="feed_lgn_pw" style="width: 190px; height: 15px; margin-left: 1px; margin-top:1px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-    '<input type="text" id="feed_height" size="4" style="margin-top:1px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-    '<span style="color:#818181;font-size: 17px;font-weight: bold;margin-left: 0px;" id="feed_text_6">&nbsp;px</span>' +
+    '<input type="text" id="feed_proxy" style="width: 120px; height: 15px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+    '<input type="password" id="feed_lgn_pw" style="width: 120px; height: 15px;" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+    '<input type="text" id="feed_height" size="4" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+    ' px' +
     '</div>' +
 
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_small.png" alt="" >' + 
+    '<div class="divider">' +
+        '<img src="images/config_divider.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_text_margin disabled" id="feed_text_7">' +
-        'Camera name : " ' + KM.config.camera + ' : ' +
+    '<div class="config_button disabled margin_top_4px" id="feed_text_3">' +
+        ' Camera name : " ' + camera + ' : ' +
         '<input type="text" id="feed_name" size="15" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
         ' "' +
-    '</div>' +
-    
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_small.png" alt="" >' + 
+    '</div>' + 
+
+    '<div class="divider">' +
+        '<img src="images/config_divider.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_tick_margin disabled" id="feed_text_8">' +	
+    '<div class="config_tick_box disabled margin_top_4px" id="feed_text_4">' +	
         '<input type="checkbox" id="feed_box" onclick="KM.conf_feed_highlight_apply();" disabled>' +
-        'Enable motion highlighting. (Draw box around detected motion)' + 
-    '</div>' +
-    
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_small.png" alt="" >' + 
+        'Enable motion highlighting (Draw box)' + 
     '</div>' +
 
-    '<div class="config_text_margin disabled" id="feed_text_9">' +
-        'Click on the image or buttons to edit the motion mask.' +
+    '<div class="divider">' +
+        '<img src="images/config_divider.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+    '<div class="config_button disabled margin_top_4px" id="feed_text_5">' +
+        'Click on the image to edit the motion mask.' +
     '</div>' +
 
-    '<div class="config_tick_margin disabled" id="feed_text_10">' +	
-        '<input type="checkbox" id="feed_ffmpeg_enabled" onclick="KM.conf_feed_ffmpeg_selected();" disabled>' +
-        'Enable movie mode. Record motion events as a (flash swf) movie. Low bandwidth playback.' +
-    '</div>' +
-    
-    '<div class="config_tick_margin disabled" id="feed_text_11">' +	
-        '<input type="checkbox" id="feed_frame_enabled" onclick="KM.conf_feed_frame_selected();" disabled>' +
-        'Enable frame mode. Record motion events as a series of discrete frames. High bandwidth playback.' +
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_text_margin disabled" style="width:412px;" id="feed_text_12">' +
-        'at : ' +
+    '<div class="config_button disabled margin_top_4px" id="feed_text_6">' +
+        'Record : ' +
         '<input type="text" id="feed_fps" size="4" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-        ' fps, (5 fps recommended)' +
-    '</div>' +
-    
-    '<div class="config_text_margin disabled" id="feed_text_13">' +	
-        'Schedule : '+ 
-	'<select id="feed_sched_motion" onchange="KM.conf_feed_highlight_apply();" disabled>' +
-	    '<option value="0">None</option>' +
-	'</select>' +
-    '</div>' +
-    
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+        ' fps, &nbsp;&nbsp;Image (frame & snap) quality : ' +
+        '<input type="text" id="feed_quality" size="4" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+        ' %, &nbsp;&nbsp;Movie quality : ' +
+        '<input type="text" id="feed_kbs" size="4" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+        ' kbs' +
     '</div>' +
 
-    '<div class="config_tick_margin disabled" id="feed_text_14">' +	
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
+    '</div>' +
+
+    '<div class="config_tick_box disabled margin_top_4px" id="feed_text_7">' +	
+        '<input type="checkbox" id="feed_frame_enabled" onclick="KM.conf_feed_frame_selected();" disabled>' +
+        'Enable frame mode. Record motion events as a series of discrete frames.' +
+    '</div>' +
+
+    '<div class="config_tick_box disabled margin_top_4px" id="feed_text_8">' +	
+        '<input type="checkbox" id="feed_ffmpeg_enabled" onclick="KM.conf_feed_ffmpeg_selected();" disabled>' +
+        'Enable movie mode. Record motion events as a (flash swf) movie.' +
+    '</div>' +
+
+    '<div class="config_tick_box disabled margin_top_4px" id="feed_text_9">' +	
+        '<input type="checkbox" id="feed_updates" onclick="KM.conf_feed_highlight_apply();" disabled>' +
+        'Enable additional live image updates. May increases server load.' +
+    '</div>' +
+
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
+    '</div>' +
+
+    '<div class="config_tick_box disabled margin_top_4px" id="feed_text_10">' +	
         '<input type="checkbox" id="feed_snap_enabled" onclick="KM.conf_feed_highlight_apply();" disabled>' +
-        'Enable snapshot mode. Record an image in time lapse mode with a pause between images.' +
-     '</div>' +
-     
-    '<div class="config_text_margin disabled" style="width:412px;" id="feed_text_15">' +
-        'of : ' +
-        '<input type="text" id="feed_snap" size="4" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-        ' Seconds, (300 Seconds recommended)' +
+        'Enable snapshot mode. Record an image in time lapse mode with a pause between images<br>&nbsp;of : ' + 
+        '<input type="text" id="feed_snap" size="6" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
+        ' Seconds (300 Seconds recommended)' +
     '</div>' +
 
-    '<div class="config_text_margin disabled" id="feed_text_16">' +	
-        'Schedule : '+ 
-	'<select id="feed_sched_snap" onchange="KM.conf_feed_highlight_apply();" disabled>' +
-	    '<option value="0">None</option>' +
-	'</select>' +
+    '<div class="divider">' +
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
-    
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
-    '</div>' +
-    
-     '<div class="config_tick_margin disabled" style="width:444px;" id="feed_text_17">' +	
-        '<input type="checkbox" id="feed_email_enabled" onclick="KM.conf_feed_highlight_apply();" disabled>' +
-        'Enable email notification on motion detection. Set' +
-    '</div>' +
-    
-     '<div class="config_text_margin disabled" id="feed_text_18">' +	       
-        'Email : ' +	       
-        '<input type="text" id="feed_email_addr" size="40" onfocus="KM.conf_feed_highlight_apply();" disabled>' +
-    '</div>' +
-    
-      '<div class="config_text_margin disabled" style="width:412px;" id="feed_text_19">' +
-        'to : ' +
-        '<input type="text" id="feed_email_pause" size="4" onfocus="KM.conf_feed_highlight_apply();" disabled>' + 
-        ' Seconds (Min) between emails.' +
-    '</div>' +
-    
-    '<div class="config_text_margin disabled" id="feed_text_20">' +	
-        'Schedule : '+ 
-	'<select id="feed_sched_email" onchange="KM.conf_feed_highlight_apply();" disabled>' +
-	    '<option value="0">None</option>' +
-	'</select>' +
-     '</div>' +
-     
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
-    '</div>' +
-     
-     '<div class="config_tick_margin disabled" style="width:459px;" id="feed_text_21">' +	
-        '<input type="checkbox" id="feed_audio_enabled" onclick="KM.conf_feed_highlight_apply();" disabled>' +
-        'Enable audible file to be played on motion detection.' +
-    '</div>' +
-    
-     '<div class="config_text_margin disabled" id="feed_text_22">' +	       
-        'File : <input type="text" id="feed_audio_file" size="40" onfocus="KM.conf_feed_highlight_apply();" disabled>' +
-    '</div>' +
-    
-     '<div class="config_text_margin disabled" style="width:412px;" id="feed_text_23">' +
-        'Files are read from the \'Audible\' dir in kmotion.' +
-    '</div>' +
-    
-    '<div class="config_text_margin disabled" id="feed_text_24">' +	
-        'Schedule : '+ 
-	'<select id="feed_sched_audio" onchange="KM.conf_feed_highlight_apply();" disabled>' +
-	    '<option value="0">None</option>' +
-	'</select>' +
-     '</div>' +
-     
-    '<div class="config_divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
-    '</div>' +
-     
-    '<div class="config_text_margin" id="feed_text_25">' +
+
+    '<div class="config_button margin_top_4px" id="feed_text_11">' +
         '<input type="button" id="feed_apply" OnClick="KM.conf_feed_apply();" value="Apply"> ' +
         'all changes to the local browser configuration and sync with the remote server.' +
     '</div>';
@@ -6390,10 +6071,7 @@ KM.conf_feed_html = function () {
         }
     }
         
-    document.getElementById('feed_camera').selectedIndex = KM.config.camera - 1;
     document.getElementById('feed_enabled').checked = KM.www_rc.feed_enabled[KM.config.camera];
-    document.getElementById('feed_pal_enabled').checked = KM.www_rc.feed_pal[KM.config.camera];
-    document.getElementById('feed_ntsc_enabled').checked = !KM.www_rc.feed_pal[KM.config.camera];
     document.getElementById('feed_device').selectedIndex = KM.www_rc.feed_device[KM.config.camera];
     document.getElementById('feed_input').selectedIndex = KM.www_rc.feed_input[KM.config.camera];
     document.getElementById('feed_url').value = KM.www_rc.feed_url[KM.config.camera];
@@ -6405,10 +6083,13 @@ KM.conf_feed_html = function () {
     document.getElementById('feed_name').value = KM.www_rc.feed_name[KM.config.camera];
     document.getElementById('feed_box').checked = KM.www_rc.feed_show_box[KM.config.camera];
     document.getElementById('feed_fps').value = KM.www_rc.feed_fps[KM.config.camera];
+    document.getElementById('feed_quality').value = KM.www_rc.feed_quality[KM.config.camera];
+    document.getElementById('feed_kbs').value = KM.www_rc.feed_kbs[KM.config.camera];
     document.getElementById('feed_snap_enabled').checked = KM.www_rc.feed_snap_enabled[KM.config.camera];	
     document.getElementById('feed_snap').value = KM.www_rc.feed_snap_interval[KM.config.camera];
     document.getElementById('feed_frame_enabled').checked = KM.www_rc.feed_smovie_enabled[KM.config.camera];
     document.getElementById('feed_ffmpeg_enabled').checked = KM.www_rc.feed_movie_enabled[KM.config.camera];
+    document.getElementById('feed_updates').checked = KM.www_rc.feed_updates[KM.config.camera];
     
     // reposition the masks
     var origin_y = document.getElementById('image').offsetTop;
@@ -6422,9 +6103,9 @@ KM.conf_feed_html = function () {
     origin_y += addit_offset;
     
     var mask_num = 0;
-    for (var y = 0; y < 15; y++) {
-        for (var x = 0; x < 15; x++) {
-            mask_num = x + 1 + (y * 15); 
+    for (var y = 0; y < 10; y++) {
+        for (var x = 0; x < 10; x++) {
+            mask_num = x + 1 + (y * 10); 
             document.getElementById('mask_' + mask_num).style.top = (origin_y + (mask_height * y)) + 'px';
             document.getElementById('mask_' + mask_num).style.left = (origin_x + (mask_width * x)) + 'px';
         }
@@ -6432,17 +6113,38 @@ KM.conf_feed_html = function () {
 
     KM.config.mask = '';
     var mask_lines = KM.www_rc.feed_mask[KM.config.camera].split('#');
-    for (var i = 0; i < 15; i++) {
-        KM.config.mask += KM.pad_out(parseInt(mask_lines[i], 16).toString(2), 15);
+    for (var i = 0; i < 10; i++) {
+        KM.config.mask += KM.pad_out(parseInt(mask_lines[i], 16).toString(2), 10);
     }
     if (KM.www_rc.feed_enabled[KM.config.camera]) {
         // if enabled show the mask and enable ptz button
-        for (var i = 0; i < 225; i++) {
+        for (var i = 0; i < 100; i++) {
             if (KM.config.mask.charAt(i) === '1') {
                 document.getElementById('mask_img_' + (i + 1)).src = 'images/mask.png'
             }
         }
+        document.getElementById('ptz_button').disabled = false;
     }
+};
+
+
+KM.conf_feed_enabled = function () {
+
+    // A function that enables/disables the current feed gui
+    //
+    // expects:
+    //
+    // return:
+    //
+    
+    KM.conf_feed_highlight_apply();
+    if (document.getElementById('feed_enabled').checked) {
+        KM.conf_feed_ungrey();
+    } else {
+        KM.conf_feed_grey();
+    }
+    // have to generate new mask on feed enabled
+    KM.conf_config_track.mask_modified(KM.config.camera);
 };
 
 
@@ -6453,7 +6155,7 @@ KM.conf_toggle_feed_mask = function (mask_num) {
     // expects:
     // 'mask_num' ... the mask number to be toggled
     //
-    // returns:
+    // return:
     //
     
     if (KM.config.mask.charAt(mask_num - 1) === '0' && document.getElementById('feed_enabled').checked) {
@@ -6468,117 +6170,13 @@ KM.conf_toggle_feed_mask = function (mask_num) {
 };
 
 
-KM.conf_feed_mask_button = function (button_num) {
-
-    // A function that performs mask wide operations
-    //
-    // expects:
-    // 'button_num' ... the mask button clicked
-    //			1: mask all, 2: mask invert, 3: mask none
-    //
-    // returns:
-    //
-    
-    for (var mask_num = 1; mask_num < 226; mask_num++) {
-    
-	if (button_num === 1) {
-	    document.getElementById('mask_img_' + mask_num).src = 'images/mask.png';
-	    KM.config.mask = KM.config.mask.substr(0, mask_num - 1) + '1' + KM.config.mask.substr(mask_num);
-	    
-	} else if (button_num === 2) {
-	    if (KM.config.mask.substr(mask_num - 1, 1) === '0') {
-	    
-		KM.config.mask = KM.config.mask.substr(0, mask_num - 1) + '1' + KM.config.mask.substr(mask_num);
-		document.getElementById('mask_img_' + mask_num).src = 'images/mask.png';
-		
-	    } else {
-	     
-		KM.config.mask = KM.config.mask.substr(0, mask_num - 1) + '0' + KM.config.mask.substr(mask_num);
-		document.getElementById('mask_img_' + mask_num).src = 'images/mask_trans.png'; 
-	    }
-	
-	} else if (button_num === 3) {
-	    document.getElementById('mask_img_' + mask_num).src = 'images/mask_trans.png';
-	    KM.config.mask = KM.config.mask.substr(0, mask_num - 1) + '0' + KM.config.mask.substr(mask_num);
-	}
-    }
-    KM.conf_config_track.mask_modified(KM.config.camera);
-    KM.conf_feed_highlight_apply();
-};
-
-
-KM.conf_feed_change = function () {
-
-    // A function changes the current camera, its breaks good programing
-    // practice by incrementing the session id and reloading the HTML from
-    // within the HTML .... yuk !!
-    //
-    // expects:
-    //
-    // returns:
-    //
-   
-    KM.session_id.current++; // needed to kill the live feed daemon
-    KM.config.camera = document.getElementById('feed_camera').selectedIndex + 1;
-    KM.add_timeout_id(KM.MISC_JUMP, setTimeout(function () {KM.conf_feed_html(); }, 1));
-};
-
-
-KM.conf_feed_enabled = function () {
-
-    // A function that enables/disables the current feed gui
-    //
-    // expects:
-    //
-    // returns:
-    //
-    
-    KM.conf_feed_highlight_apply();
-    if (document.getElementById('feed_enabled').checked) {
-        KM.conf_feed_ungrey();
-    } else {
-        KM.conf_feed_grey();
-    }
-    // have to generate new mask on feed enabled
-    KM.conf_config_track.mask_modified(KM.config.camera);
-};
-
-
-KM.conf_feed_pal_selected = function () {
-
-    // A function that excludes 'pal' and 'ntsc' from being both selected
-    //
-    // expects:
-    //
-    // returns:
-    //
-    
-    document.getElementById('feed_ntsc_enabled').checked = false;
-    KM.conf_feed_highlight_apply();
-};
-
-
-KM.conf_feed_ntsc_selected = function () {
-
-    // A function that excludes 'pal' and 'ntsc' from being both selected
-    //
-    // expects:
-    //
-    // returns:
-    //
-    
-    document.getElementById('feed_pal_enabled').checked = false;
-    KM.conf_feed_highlight_apply();
-};
-
-
 KM.conf_feed_net_highlight = function () {
 
     // A function that enables/disables user inputs for net cams
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     if (document.getElementById('feed_device').selectedIndex == 16) {
@@ -6604,7 +6202,7 @@ KM.conf_feed_frame_selected = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     document.getElementById('feed_ffmpeg_enabled').checked = false;
@@ -6618,7 +6216,7 @@ KM.conf_feed_ffmpeg_selected = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     document.getElementById('feed_frame_enabled').checked = false;
@@ -6632,28 +6230,24 @@ KM.conf_feed_grey = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.session_id.current++; // needed to kill updates
     KM.conf_error_daemon(KM.session_id.current);
-  
-    var ids = ['mask_all' , 'mask_invert', 'mask_none', 'feed_pal_enabled', 
-    'feed_ntsc_enabled', 'feed_device', 'feed_url', 'feed_lgn_name', 'feed_width', 
-    'feed_input', 'feed_proxy', 'feed_lgn_pw', 'feed_height', 'feed_name', 
-    'feed_box', 'feed_ffmpeg_enabled', 'feed_frame_enabled', 'feed_fps', 
-    'feed_sched_motion', 'feed_snap_enabled', 'feed_snap', 'feed_sched_snap', 
-    'feed_email_enabled', 'feed_email_addr', 'feed_email_pause', 'feed_sched_email', 
-    'feed_audio_enabled', 'feed_audio_file', 'feed_sched_audio']
-    
+    var ids = ['feed_device', 'feed_input', 'feed_url', 'feed_proxy', 
+    'feed_lgn_name', 'feed_lgn_pw', 'feed_width', 'feed_height', 'feed_name', 
+    'feed_box', 'feed_fps', 'feed_quality', 'feed_kbs', 'feed_snap_enabled', 
+    'feed_snap', 'feed_frame_enabled', 'feed_ffmpeg_enabled', 'feed_updates'];
+
     for (var i = 0; i < ids.length; i++) {
         document.getElementById(ids[i]).disabled = true;
     }
-    for (var i = 1; i < 25; i++) {
+    for (var i = 1; i < 11; i++) {
         document.getElementById('feed_text_' + i).style.color = KM.GHOST
     }
-    for (var i = 1; i < 226; i++) {
-        document.getElementById('mask_img_' + (i)).src = 'images/mask_trans.png'
+    for (var i = 0; i < 100; i++) {
+        document.getElementById('mask_img_' + (i + 1)).src = 'images/mask_trans.png'
     }
     document.getElementById('image').src = 'images/gcam.png';
 };
@@ -6665,29 +6259,25 @@ KM.conf_feed_ungrey = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.conf_live_feed_daemon(KM.session_id.current, KM.config.camera);
-    
-    var ids = ['mask_all' , 'mask_invert', 'mask_none', 'feed_pal_enabled', 
-    'feed_ntsc_enabled', 'feed_device', 'feed_url', 'feed_lgn_name', 'feed_width', 
-    'feed_input', 'feed_proxy', 'feed_lgn_pw', 'feed_height', 'feed_name', 
-    'feed_box', 'feed_ffmpeg_enabled', 'feed_frame_enabled', 'feed_fps', 
-    'feed_sched_motion', 'feed_snap_enabled', 'feed_snap', 'feed_sched_snap', 
-    'feed_email_enabled', 'feed_email_addr', 'feed_email_pause', 'feed_sched_email', 
-    'feed_audio_enabled', 'feed_audio_file', 'feed_sched_audio']
-    
+    var ids = ['feed_device', 'feed_input', 'feed_url', 'feed_proxy', 
+    'feed_lgn_name', 'feed_lgn_pw', 'feed_width', 'feed_height', 'feed_name', 
+    'feed_box', 'feed_fps', 'feed_quality', 'feed_kbs', 'feed_snap_enabled', 
+    'feed_snap', 'feed_frame_enabled', 'feed_ffmpeg_enabled', 'feed_updates'];
+
     for (var i = 0; i < ids.length; i++) {
         document.getElementById(ids[i]).disabled = false;
     }
-    for (var i = 1; i < 25; i++) {
+    for (var i = 1; i < 11; i++) {
         document.getElementById('feed_text_' + i).style.color = KM.DARK_GREY
     }
     KM.conf_feed_net_highlight();
     document.getElementById('image').src = 'images/bcam.png';
     // if enabled show the mask
-    for (var i = 0; i < 225; i++) {
+    for (var i = 0; i < 100; i++) {
         if (KM.config.mask.charAt(i) === '1') {
             document.getElementById('mask_img_' + (i + 1)).src = 'images/mask.png'
         }
@@ -6701,26 +6291,25 @@ KM.conf_feed_highlight_apply = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     document.getElementById('feed_apply').style.fontWeight = 'bold';
     document.getElementById('feed_apply').style.color = KM.BLUE;
-    document.getElementById('feed_text_25').style.color = KM.BLUE;
+    document.getElementById('feed_text_11').style.color = KM.BLUE;
 };
 
 
 KM.conf_feed_apply = function () {
 
-    // A function that checks and applys the changes
+    // A function that check and apply the changes
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.www_rc.feed_enabled[KM.config.camera] = document.getElementById('feed_enabled').checked;
-    KM.www_rc.feed_pal[KM.config.camera] = document.getElementById('feed_pal_enabled').checked;
     KM.www_rc.feed_device[KM.config.camera] = document.getElementById('feed_device').selectedIndex;
     KM.www_rc.feed_input[KM.config.camera] = document.getElementById('feed_input').selectedIndex;
     KM.www_rc.feed_url[KM.config.camera] = document.getElementById('feed_url').value;
@@ -6732,11 +6321,12 @@ KM.conf_feed_apply = function () {
     KM.www_rc.feed_snap_enabled[KM.config.camera] = document.getElementById('feed_snap_enabled').checked;	
     KM.www_rc.feed_smovie_enabled[KM.config.camera] = document.getElementById('feed_frame_enabled').checked;
     KM.www_rc.feed_movie_enabled[KM.config.camera] = document.getElementById('feed_ffmpeg_enabled').checked;
+    KM.www_rc.feed_updates[KM.config.camera] = document.getElementById('feed_updates').checked;
 
     var tmp = '';
     KM.www_rc.feed_mask[KM.config.camera] = '';
-    for (var i = 0; i < 15; i++) {
-        tmp = KM.config.mask.substr(i * 15, 15);
+    for (var i = 0; i < 10; i++) {
+        tmp = KM.config.mask.substr(i * 10, 10);
         KM.www_rc.feed_mask[KM.config.camera] += parseInt(tmp, 2).toString(16) + '#';	
     }
 
@@ -6768,6 +6358,20 @@ KM.conf_feed_apply = function () {
     // feed value back to gui in case parseInt changes it
     document.getElementById('feed_fps').value = fps;
 
+    var quality = parseInt(document.getElementById('feed_quality').value, 10);
+    if (isNaN(quality)) quality = 10;
+    quality = Math.max(10, quality);
+    quality = Math.min(100, quality);
+    KM.www_rc.feed_quality[KM.config.camera] = quality;
+    // feed value back to gui in case parseInt changes it
+    document.getElementById('feed_quality').value = quality;
+
+    var kbs = parseInt(document.getElementById('feed_kbs').value, 10);
+    if (isNaN(kbs)) kbs = 0;
+    KM.www_rc.feed_kbs[KM.config.camera] = kbs;
+    // feed value back to gui in case parseInt changes it
+    document.getElementById('feed_kbs').value = kbs;
+
     var snap = parseInt(document.getElementById('feed_snap').value, 10);
     if (isNaN(snap)) snap = 0;
     KM.www_rc.feed_snap_interval[KM.config.camera] = snap;
@@ -6784,7 +6388,7 @@ KM.conf_feed_apply = function () {
     // reset any warning highlight on the apply line
     document.getElementById('feed_apply').style.fontWeight = 'normal';
     document.getElementById('feed_apply').style.color = KM.BLACK;
-    document.getElementById('feed_text_25').style.color = KM.DARK_GREY;
+    document.getElementById('feed_text_11').style.color = KM.DARK_GREY;
 
     KM.conf_config_track.feed_modified(KM.config.camera);
     KM.conf_config_track.sync();
@@ -6799,7 +6403,7 @@ KM.conf_live_feed_daemon = function (session_id, feed) {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
 
     var session_id_config = session_id; 
@@ -6867,7 +6471,7 @@ KM.conf_ptz_html = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.config.session_id = KM.session_id.current;
@@ -6877,7 +6481,7 @@ KM.conf_ptz_html = function() {
     var html_str = '<br>' +
 
     '<div style="float:left; width:360px;">' +
-        '<div class="config_margin_left_20px">' + 
+        '<div class="margin_left_20px">' + 
             '<img id="image" ' +
             'style="width: ' + image_width + 'px; height: ' + image_height + 
             'px;" src="images/gcam.png" alt=""> ' +
@@ -6901,7 +6505,7 @@ KM.conf_ptz_html = function() {
         '<img src="images/config_divider.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_button disabled" id="ptz_text_1">' +
+    '<div class="config_button disabled margin_top_4px" id="ptz_text_1">' +
         'Driver : ' +
         '<select id="ptz_track" onchange="KM.conf_ptz_highlight_apply();" disabled>' +
             '<option value="1">1: stepper (motion tracking project)' +
@@ -6925,17 +6529,17 @@ KM.conf_ptz_html = function() {
         '<img src="images/config_divider.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_tick_box disabled" id="ptz_text_2">' +	
+    '<div class="config_tick_box disabled margin_top_4px" id="ptz_text_2">' +	
         '<input type="checkbox" id="ptz_calib_first" onclick="KM.conf_ptz_highlight_apply();" disabled>' +
         'Auto recalibrate. (Causes addition pan / tilting)' + 
     '</div>' +
 
-    '<div style="float:left; width:120px;" class="config_button disabled" id="ptz_text_3">' +
+    '<div style="float:left; width:120px;" class="config_button disabled margin_top_4px" id="ptz_text_3">' +
         'Steps Click X :<br>' +
         'Button Delay :<br>' +
     '</div>' +
 
-    '<div >' +
+    '<div class="margin_top_4px">' +
         '<input type="text" id="ptz_step_x" size="3" onfocus="KM.conf_ptz_highlight_apply();" disabled>&nbsp;' + 
         '<span class="config_text_basic disabled" id="ptz_text_4">' +
             '&nbsp;&nbsp;&nbsp;Steps Click Y :&nbsp;&nbsp;' + 
@@ -6948,7 +6552,7 @@ KM.conf_ptz_html = function() {
         '<img src="images/config_divider.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_button disabled" id="ptz_text_5">' +
+    '<div class="config_button disabled margin_top_4px" id="ptz_text_5">' +
         'Always ' +
         '<input type="button" id="ptz_calib" \
         OnClick="KM.conf_ptz_calibrate();" value="Calibrate PT(Z) to X0:Y0" disabled> ' +
@@ -6961,12 +6565,12 @@ KM.conf_ptz_html = function() {
         '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_tick_box disabled" id="ptz_text_6">' +	
+    '<div class="config_tick_box disabled margin_top_4px" id="ptz_text_6">' +	
         '<input type="checkbox" id="ptz_park_enabled" onclick="KM.conf_ptz_highlight_apply();" disabled>' +
         'Enable auto park. Moves the camera to a set position if no activity for a preset time.' + 
     '</div>' +
 
-    '<div class="config_button disabled" id="ptz_text_7">' +
+    '<div class="config_button disabled margin_top_4px" id="ptz_text_7">' +
         '<input type="button" id="ptz_park_1" OnClick="KM.conf_ptz_set_park();" value="Set Position" disabled>' +
         '<input type="button" id="ptz_park_2" OnClick="KM.conf_ptz_test_park();" value="Test" disabled>' +
         ' Auto park seconds : ' +
@@ -6977,7 +6581,7 @@ KM.conf_ptz_html = function() {
         '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
-    '<div >' + 
+    '<div class="margin_top_4px">' + 
         '<div class="config_button disabled" id="ptz_text_8">' +
             '<input type="button" id="ptz_preset_1" OnClick="KM.conf_ptz_set_preset(1);" value="Set Position" disabled>' +
             '<input type="button" id="ptz_preset_2" OnClick="KM.conf_ptz_test_preset(1);" value="Test" disabled>' +
@@ -7007,7 +6611,7 @@ KM.conf_ptz_html = function() {
         '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
-    '<div class="config_button" id="ptz_text_12">' +
+    '<div class="config_button margin_top_4px" id="ptz_text_12">' +
         '<input type="button" id="ptz_apply" OnClick="KM.conf_ptz_apply();" value="Apply"> ' +
         'all changes to the local browser configuration and sync with the remote server.' +	
     '</div>';
@@ -7038,7 +6642,7 @@ KM.conf_ptz_servo = function (button) {
     // expects:
     // 'button' ... the clicked button
     //
-    // returns:
+    // return:
     //
     
     KM.exe_script('/cgi_bin/xmlHttp_ptz.py', 'crf' + KM.pad_out2(KM.config.camera) + 'b' + KM.pad_out2(button) + '$')
@@ -7058,7 +6662,7 @@ KM.conf_ptz_calibrate = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.conf_ptz_grey_LUDR();
@@ -7075,7 +6679,7 @@ KM.conf_ptz_set_park = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.www_rc.ptz_park_x[KM.config.camera] = KM.config.ptz_current_x;
@@ -7090,7 +6694,7 @@ KM.conf_ptz_test_park = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.conf_ptz_grey_LUDR();
@@ -7109,7 +6713,7 @@ KM.conf_ptz_set_preset = function (preset) {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.www_rc['ptz_preset' + preset + '_x'][KM.config.camera] = KM.config.ptz_current_x;
@@ -7125,7 +6729,7 @@ KM.conf_ptz_test_preset = function (preset) {
     // expects:
     // 'preset' ... the preset number to test
     //
-    // returns:
+    // return:
     //
     
     KM.conf_ptz_grey_LUDR();
@@ -7144,7 +6748,7 @@ KM.conf_ptz_enabled = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.conf_config_track.ptz_en_tt_modified(KM.config.camera);
@@ -7163,7 +6767,7 @@ KM.conf_ptz_highlight_apply = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     document.getElementById('ptz_apply').style.fontWeight = 'bold';
@@ -7178,7 +6782,7 @@ KM.conf_ptz_grey = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.session_id.current++; // needed to kill updates
@@ -7206,7 +6810,7 @@ KM.conf_ptz_grey_LUDR = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     var ids = ['ptz_left', 'ptz_up', 'ptz_down', 'ptz_right'];
@@ -7222,7 +6826,7 @@ KM.conf_ptz_ungrey = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.conf_live_feed_daemon(KM.session_id.current, KM.config.camera);
@@ -7254,7 +6858,7 @@ KM.conf_ptz_ungrey_LUDR = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     if (KM.www_rc.ptz_enabled[KM.config.camera] && KM.config.session_id === KM.session_id.current) {
@@ -7272,7 +6876,7 @@ KM.conf_ptz_apply = function () {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     KM.www_rc.ptz_enabled[KM.config.camera] = document.getElementById('ptz_enabled').checked;
@@ -7322,460 +6926,6 @@ KM.conf_ptz_apply = function () {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* **************************************************************************** 
-Config display - Schedules config screen
-
-Displays and processes the schedules config screen
-**************************************************************************** */
-
-
-
-KM.conf_schedulexxx = function () {
-
-    KM.kill_timeout_ids(KM.MISC_JUMP);
-};
-
-
-
-
-
-KM.conf_schedule_html = function () {
-
-    // A function that generates the schedule HTML. It create the 
-    // schedule config screen on the config backdrop 'slab'. __NOTE__ There 
-    // is a seperate function to generate the schedule exception HTML.
-    //
-    // expects:
-    //
-    // returns:
-    //
-    
-    html_str = '<br>' +
-    
-    '<div class="sched_selector" style="width:952px;">' +
-	
-	    '<select id="sched_select" onchange="KM.conf_sched_change();">' +
-		'<option>Schedule 1</option>' +	
-		'<option>Schedule 2</option>' +	
-		'<option>Schedule 3</option>' +	
-		'<option>Schedule 4</option>' +	
-		'<option>Schedule 5</option>' +	
-		'<option>Schedule 6</option>' +	
-		'<option>Schedule 7</option>' +	
-		'<option>Schedule 8</option>' +	
-	    '</select>' +
-	
-	    '<input type="button" id="sched_week"' +
-	    'OnClick="KM.conf_sched_week();" value="Weekly Schedule">' +
-	    
-	    '<input type="button" id="sched_except"' +
-	    'OnClick="KM.conf_sched_week_except();" value="Exceptions to Weekly Schedule">' +
-	
-	'<span class="sched_status">&nbsp;Schedule Status : Inactive</span>' +  
-	
-   '</div><br>' +
-   
-    KM.conf_sched_weekday(KM.config.sched, 1, 'Monday') +
-    KM.conf_sched_weekday(KM.config.sched, 2, 'Tuesday') +
-    KM.conf_sched_weekday(KM.config.sched, 3, 'Wednesday') +
-    KM.conf_sched_weekday(KM.config.sched, 4, 'Thursday') +
-    KM.conf_sched_weekday(KM.config.sched, 5, 'Friday') +
-    KM.conf_sched_weekday(KM.config.sched, 6, 'Saturday') +
-    KM.conf_sched_weekday(KM.config.sched, 7, 'Sunday') +
-
-    '<div class="config_text_margin">' +
-	'<input type="button" id="sched_apply" disabled="disabled" OnClick="KM.conf_sched_apply();" value="Apply Schedule Changes"> ' +
-    '</div>';
-    
-    document.getElementById('config_html').innerHTML = html_str;
-    document.getElementById('sched_select').selectedIndex = KM.config.sched - 1;  
-};
-
-
-KM.conf_sched_weekday = function (sched, index, day) {
-
-    // A function that generates the schedule buttons and time line HTML for
-    // a particular day
-    // 
-    // expects:
-    // 'sched' ... the schedule number
-    // 'index' ... the time line index number
-    // 'day'   ... the 'day' string
-    //
-    // returns: 
-    // 'html' ... time line html
-    
-    return '<div class="sched_selector" style="width:952px; margin-bottom: 4px;">' +
-		'<input type="button" style="width: 200px;" value="' + day + '">' +
-	     
-		'<span style="float:right;">' +
-		    '<input type="button"' +
-		    'OnClick="KM.conf_sched_select_all(' + index + ');" value="Select All">' +
-		    
-		    '<input type="button"' +
-		    'OnClick="KM.conf_sched_select_invert(' + index + ');" value="Select Invert">' +
-		    
-		    '<input type="button"' +
-		    'OnClick="KM.conf_sched_select_none(' + index + ');" value="Select None">' +
-		    
-		    '<input type="button"' +
-		    'OnClick="KM.conf_sched_copy(' + index + ');" value="Copy">' +
-		    
-		    '<input type="button"' +
-		    'OnClick="KM.conf_sched_paste(' + index + ');" value="Paste">' +
-		    
-		'</span>' +
-		 
-	    '</div>' +
-	    
-	    KM.conf_sched_tline(sched, index) +
-	    
-	    '<div style="height: 10px;"></div>' 
-};
-
-    
-KM.conf_sched_tline = function (sched, index) {
-
-    // A function that generates the schedule time line HTML
-    //
-    // expects:
-    // 'sched' ... the schedule number
-    // 'index' ... the time line index number
-    //
-    // returns: 
-    // 'html'  ... time line html
-    
-    // calculated rather than hard coded
-    var width = 952;
-    var height = 25;
-    var pos = 0, old_pos = 0;
-    var mins = 0, hours = 0, title = '';
-    var segments = (24 * 60) / 15;
-    var scale = width / segments;
-    var segment_width;
-    
-    // convert 4 x 6 digit hex to 96 bit bin, truncating as necessary
-    var tline = KM.www_rc['sched_tline' + index][sched];
-    var tmp, tmp2, fill;
-    
-    for (var i = 0; i < (segments / 4) ; i++) fill += '0';
-    var segments_data = '';
-    var tmp1 = tline.split('#');
-    
-    for (var i = 0; i < 4; i++) {
-	tmp2 = parseInt('0x' + tmp1[i], 16).toString(2);
-	segments_data += (fill.substr(0, (segments / 4)- tmp2.length) + tmp2);
-    };
-    
-    // construct the html
-    var tline = '' +
-    '<div id="timeline" class="sched_timeline" style="width:' + width + 'px;">' 
-    
-    for (var i = 1; i < segments + 1; i++) {
-	pos = Math.round(i * scale);
-	segment_width = pos - old_pos;
-	old_pos = pos;
-		
-	// generate 'title' HH:MM-HH:MM
-	mins = (i - 1) * 15;
-	hours = parseInt(mins / 60);
-	mins = mins - (hours * 60);
-	title = KM.pad_out2(hours) + ":" + KM.pad_out2(mins) + " - " + KM.pad_out2(hours) + ":" + KM.pad_out2(mins + 14);
-	
-	tline += '<img id="tline_' + index + '_' + i + '" ' ;
-   
-	if (segments_data.charAt(i - 1) == '1') {
-	    tline += 'src="./images/sched_green.png" ';
-	} else {
-	    tline += 'src="./images/sched_grey.png" ';
-	}
-	
-	tline += 'style="width:' + segment_width + 'px;height:' + height + 
-	'px;" onClick="KM.sched_tline_clicked(' + index + ', ' + i + ')" title="' +
-	title  + '" alt=" schedule timeline">'; 
-    }
-    
-    tline += '</div>';
-    return tline;
-};
-    
-    
-KM.conf_sched_change = function() {
-
-    // A function that changes the selected schedule
-    //
-    // expects:
-    //
-    // returns: 
-    // 
-    
-    KM.config.sched = document.getElementById('sched_select').selectedIndex + 1;
-    KM.add_timeout_id(KM.MISC_JUMP, setTimeout(function () {KM.conf_schedule_html(); }, 1));
-};
-
-
-KM.sched_tline_clicked = function(index, segment) {
-
-    // A function that inverts the clicked time line segment 
-    //
-    // expects:
-    // 'index'   ... the time line index number
-    // 'segment' ... the clicked segment
-    //
-    // returns: 
-    // 
-    
-    var ref = 'tline_' + index + '_' + segment;
-    // a bodge, but an efficient one ... ouch !!!
-    if (document.getElementById(ref).src.indexOf('green.png') != -1) {
-	document.getElementById(ref).src = './images/sched_grey.png';
-    } else {
-	document.getElementById(ref).src = './images/sched_green.png';
-    }
-    KM.conf_sched_highlight_apply();
-};
-
-
-KM.conf_sched_select_all = function(index) {
-
-    // A function that sets all the time line segments to green
-    //
-    // expects:
-    // 'index' ... the time line index number
-    //
-    // returns: 
-    // 
-    
-    var segments = (24 * 60) / 15;
-    for (var i = 1; i < segments + 1; i++) {
-	
-	document.getElementById('tline_' + index + '_' + i).src = './images/sched_green.png';
-    }
-    KM.conf_sched_highlight_apply();
-};
-
-
-KM.conf_sched_select_invert = function(index) {
-
-    // A function that inverts all the time line segments 
-    //
-    // expects:
-    // 'index' ... the time line index number
-    //
-    // returns: 
-    // 
-    
-    var segments = (24 * 60) / 15;
-    var ref;
-    
-    for (var i = 1; i < segments + 1; i++) {	
-	ref = 'tline_' + index + '_' + i;
-	// a bodge, but an efficient one ... ouch !!!
-	if (document.getElementById(ref).src.indexOf('green.png') != -1) {
-	    document.getElementById(ref).src = './images/sched_grey.png';
-	} else {
-	    document.getElementById(ref).src = './images/sched_green.png';
-	}
-    }
-    KM.conf_sched_highlight_apply();
-};
-
-
-KM.conf_sched_select_none = function(index) {
-
-    // A function that sets all the time line segments to grey
-    //
-    // expects:
-    // 'index' ... the time line index number
-    //
-    // returns: 
-    // 
-    
-    var segments = (24 * 60) / 15;
-    for (var i = 1; i < segments + 1; i++) {
-	
-	document.getElementById('tline_' + index + '_' + i).src = './images/sched_grey.png';
-    }
-    KM.conf_sched_highlight_apply();
-};
-
-
-KM.conf_sched_copy = function(index) {
-
-    // A function that copies the state of the time line segments
-    //
-    // expects:
-    // 'index' ... the time line index number
-    //
-    // returns: 
-    // 
-    
-    var segments = (24 * 60) / 15;
-    KM.config.sched_pastebin = '';
-    
-    for (var i = 1; i < segments + 1; i++) {
-	if (document.getElementById('tline_' + index + '_' + i).src.indexOf('green.png') != -1) {
-	    KM.config.sched_pastebin += '1';
-	} else {
-	    KM.config.sched_pastebin += '0';
-	}
-    }
-    KM.conf_sched_highlight_apply();
-};
-
-
-KM.conf_sched_paste = function(index) {
-
-    // A function that pastes the state of the time line segments
-    //
-    // expects:
-    // 'index' ... the time line index number
-    //
-    // returns: 
-    // 
-    
-    var segments = (24 * 60) / 15;
-    
-    for (var i = 1; i < segments + 1; i++) {
-	if (KM.config.sched_pastebin.charAt(i - 1) === '1') {
-	    document.getElementById('tline_' + index + '_' + i).src = './images/sched_green.png';
-	} else {
-	    document.getElementById('tline_' + index + '_' + i).src = './images/sched_grey.png';
-	}
-    }
-    KM.conf_sched_highlight_apply();
-};
-
-
-KM.conf_sched_highlight_apply = function () {
-
-    // A function that highlight the 'need to apply' warning
-    //
-    // expects:
-    //
-    // returns:
-    //
-    
-    document.getElementById('sched_apply').disabled = false; 
-    document.getElementById('sched_apply').style.color = KM.RED;
-};
-
-
-KM.conf_sched_apply = function () {
-
-    // A function that applys the schedule changes
-    //
-    // expects:
-    //
-    // returns:
-    //
-    
-    var segments = (24 * 60) / 15;
-    var tline, encoded;    
-
-    for (var line = 1; line < 8; line++) {
-    
-	// read the raw segment data
-	tline = '';
-	for (var segment = 1; segment < segments + 1; segment++) {
-	    // a bodge, but an efficient one ... ouch !!!
-	    if (document.getElementById('tline_' + line + '_' + segment).src.indexOf('green.png') != -1) {
-		tline += '1';
-	    } else {
-		tline += '0';
-	    }
-	}
-	
-	// spliting and encodeing to hex
-	encoded = '';
-	for (var i = 1; i < 5; i++) {
-	     encoded += parseInt(tline.slice((i - 1) * 24, i * 24), 2).toString(16) + '#';
-	}
-	KM.www_rc['sched_tline' + line][KM.config.sched] = encoded;
-    }
-    
-    KM.conf_config_track.sched_modified(KM.config.sched);
-    KM.conf_config_track.sync();
-	
-    // reset the 'need to apply' warning
-    document.getElementById('sched_apply').disabled = true; 
-    document.getElementById('sched_apply').style.color = KM.DARK_GREY; 
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-/* **************************************************************************** 
-Config display - Themes config screen
-
-Displays and processes the themes config screen
-**************************************************************************** */
-
-KM.conf_theme_html = function() {
-    document.getElementById('config_html').innerHTML = 'STUB CODE' 
-}
-
 /* **************************************************************************** 
 Config display - motion error screen
 
@@ -7792,7 +6942,7 @@ KM.conf_error_html = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
 
     document.getElementById('config_html').innerHTML = '<br>' +
@@ -7828,13 +6978,11 @@ KM.conf_load_html = function() {
     //
     // expects:
     //
-    // returns:
+    // return:
     //
     
     var session_id = KM.session_id.current;
-    var MAX_PX    = 955;
-    var BAR_OK    = '#00FF00';
-    var BAR_ALERT = '#FF0000';
+    var MAX_PX = 750;
 
     document.getElementById('config_html').innerHTML = '<br>' +
 
@@ -7843,7 +6991,7 @@ KM.conf_load_html = function() {
     '</div>' +
 
     '<div class="divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
     '<div id="load_av_title" class="config_text_center">' +
@@ -7855,7 +7003,7 @@ KM.conf_load_html = function() {
     create_bar('15 min', 3) +
 
     '<div class="divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
     '<div id="cpu_title" class="config_text_center">' +
@@ -7867,7 +7015,7 @@ KM.conf_load_html = function() {
     create_bar('IO Wait', 6) +
 
     '<div class="divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
     '<div id="memory_title" class="config_text_center">' +
@@ -7879,7 +7027,7 @@ KM.conf_load_html = function() {
     create_bar('Cached', 9) +
 
     '<div class="divider">' +
-        '<img src="images/config_divider_large.png" alt="" >' + 
+        '<img src="images/config_divider_xl.png" alt="" >' + 
     '</div>' +
 
     '<div id="swap_title" class="config_text_center">' +
@@ -7891,8 +7039,8 @@ KM.conf_load_html = function() {
     function create_bar(text, bar_number) {
         if (KM.browser.browser_IE) { // ugly hack as a workaround for IE
             return '' +
-            '<div class="bar_bground" style="margin-top:9px;">' +
-                '<div id="bar_fground' + bar_number + '" class="bar_fground" style="background-color:' + BAR_OK + ';">' +
+            '<div class="bar_bground margin_top_4px">' +
+                '<div id="bar_fground' + bar_number + '" class="bar_fground">' +
                 '</div>' +
                 '<span id="bar_text' + bar_number + '" class="bar_text_IE">' +
                 text +
@@ -7902,13 +7050,13 @@ KM.conf_load_html = function() {
             '</div>';
         } else {
             return '' +
-            '<div class="bar_bground" style="margin-top:9px;">' +
+            '<div class="bar_bground  margin_top_4px">' +
                 '<span id="bar_text' + bar_number + '" class="bar_text">' +
                 text +
                 '</span>' +
                 '<span id="bar_value' + bar_number + '" class="bar_value">' +
                 '</span>' +
-                '<div id="bar_fground' + bar_number + '" class="bar_fground" style="background-color:' + BAR_OK + ';">' +
+                '<div id="bar_fground' + bar_number + '" class="bar_fground">' +
                 '</div>' +
             '</div>';
         }
@@ -7952,9 +7100,9 @@ KM.conf_load_html = function() {
         tmp = Math.min(dbase.l2, 1.5);
         document.getElementById('bar_fground2').style.width = (tmp * (MAX_PX / 1.5)) + 'px';
         if (tmp >= 1) {
-            document.getElementById('bar_fground2').style.backgroundColor = BAR_ALERT;
+            document.getElementById('bar_fground2').style.backgroundColor = KM.RED;
         } else {
-            document.getElementById('bar_fground2').style.backgroundColor = BAR_OK;
+            document.getElementById('bar_fground2').style.backgroundColor = KM.BAR;
         }
     
         // load average 15 min
@@ -7962,9 +7110,9 @@ KM.conf_load_html = function() {
         tmp = Math.min(dbase.l3, 1.5);
         document.getElementById('bar_fground3').style.width = (tmp * (MAX_PX / 1.5)) + 'px';
         if (tmp >= 1) {
-            document.getElementById('bar_fground3').style.backgroundColor = BAR_ALERT;
+            document.getElementById('bar_fground3').style.backgroundColor = KM.RED;
         } else {
-            document.getElementById('bar_fground3').style.backgroundColor = BAR_OK;
+            document.getElementById('bar_fground3').style.backgroundColor = KM.BAR;
         }
     
         // CPU user
@@ -8005,9 +7153,9 @@ KM.conf_load_html = function() {
         tmp = (dbase.su / dbase.st);
         document.getElementById('bar_fground10').style.width = (tmp * MAX_PX) + 'px';
         if (tmp >= 0.1) {
-            document.getElementById('bar_fground10').style.backgroundColor = BAR_ALERT;
+            document.getElementById('bar_fground10').style.backgroundColor = KM.RED;
         } else {
-            document.getElementById('bar_fground10').style.backgroundColor = BAR_OK;
+            document.getElementById('bar_fground10').style.backgroundColor = KM.BAR;
         }
     }
 
@@ -8066,16 +7214,18 @@ KM.display_about = function () {
     //
     
     KM.session_id.current++;
-    
+    // awkward hacks to keep consistant interface across browsers
+	var title_str = 'title_FF';
+	if (KM.browser.browser_OP) title_str = 'title_OP';
+	if (KM.browser.browser_IE) title_str = 'title_IE';
+	
     document.getElementById('main_display').innerHTML = '' +
-    
-    
-    '<div class="title" style="width: 992px;">' + 
-	'kmotion: About' +
+    '<div id="' + title_str + '">' +
+	'<span class="italic">kmotion</span>: About' +
     '</div>' +
-    
+
     '<div class="divider">' +
-        '<img src="images/about_divider_color.png" alt="" >' + 
+	'<img src="images/divider_xl.png" alt="" />' + 
     '</div>' +
     
     '<div class="para_msg">' +
@@ -8148,17 +7298,22 @@ KM.display_msg = function() {
     KM.session_id.current++;
 
     if (KM.www_rc.msg.length < 5) {
+	// awkward hacks to keep consistant interface across browsers
+	var title_str = 'title_FF';
+	if (KM.browser.browser_OP) title_str = 'title_OP';
+	if (KM.browser.browser_IE) title_str = 'title_IE';
 	
         document.getElementById('main_display').innerHTML = '' +
-	
-	'<div class="title" style="width: 992px;">' + 
-	    'kmotion: Message' +
-	'</div>' +
-	
-	'<div class="divider">' +
-	    '<img src="images/message_divider_color.png" alt="" >' + 
-	'</div>' +
-	
+        '<div id="' + title_str + '">';
+    
+        document.getElementById('main_display').innerHTML = '' +
+        '<div id="' + title_str + '">' +
+            '<span class="italic">kmotion</span>: Msg' +
+        '</div>' +
+    
+        '<div class="divider">' +
+            '<img src="images/divider_xl.png" alt="" />' + 
+        '</div>' +
         '<div class="para_msg"><p style="text-align: center">No Messages ...</p></div>';
 
     } else {
@@ -8214,7 +7369,7 @@ KM.init2 = function (data) {
 	// returns :
 	//
 	
-        //////////////////////////////////////////////////////////KM.background_button_clicked(KM.www_rc.color_select);
+        KM.background_button_clicked(KM.www_rc.color_select);
         KM.enable_display_buttons(KM.www_rc.display_select);
         KM.enable_camera_buttons();
 	

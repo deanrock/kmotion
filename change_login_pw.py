@@ -106,7 +106,14 @@ def reset():
     
     checking('Changing user name and password')
     # creates 'users_digest' and leaves it as user root, not an issue
-    Popen('htpasswd -bc %s/www/passwords/users_digest %s %s' % (kmotion_dir, uname, password), shell=True)
+    
+    stderr = Popen('htpasswd -bc %s/www/passwords/users_digest %s %s' % 
+                   (kmotion_dir, uname, password), stderr=PIPE, shell=True).communicate()
+    
+    # special case for Suse, it uses 'htpasswd2'
+    if stderr[1][:15] != 'Adding password for':
+        Popen('htpasswd2 -bc %s/www/passwords/users_digest %s %s' % 
+              (kmotion_dir, uname, password), shell=True)
     ok()
     
     checking('Restarting apache2')

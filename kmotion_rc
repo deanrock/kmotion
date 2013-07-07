@@ -1,0 +1,13 @@
+[LDAP]
+authldapurl = ldap://YOURDOMAIN.COM/ou=ENTER,dc=YOUR,dc=DETAILS?uid
+enabled = no
+
+[dirs]
+images_dbase_dir = /home/dave/kmotion2/images_dbase
+
+[misc]
+port = 8085
+
+[storage]
+images_dbase_limit_gb = 20
+

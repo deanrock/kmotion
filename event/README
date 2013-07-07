@@ -1,0 +1,30 @@
+The 'event' directory holds shell scripts that are executed when motion is 
+detected and when motion ceases. This is a direct tap off of 'motions' 
+'on_event_start' and 'on_event_end' options. This feature is useful for turning 
+on lights, sounding horns etc ... on a remote site.
+
+The  scripts MUST be of the format 'event_start<2 dig num 01-16>.sh
+
+For example :
+
+Create a file called event_start01.sh in the event directory, containing 
+the following ...
+
+#!/bin/bash
+touch ~/Desktop/There\ is\ motion
+
+Create a file called event_end01.sh in the event directory, containing 
+the following ...
+
+#!/bin/bash
+rm ~/Desktop/There\ is\ motion
+
+Make them executable with ...
+
+chmod +x event_start01.sh
+chmod +x event_end01.sh
+
+Finally create motion in front of camera 1 and magically a file
+called 'There is motion !' appears on your desktop. When the motion
+stops the message disappears.
+

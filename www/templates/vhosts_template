@@ -1,0 +1,78 @@
+Listen %port%
+NameVirtualHost *:%port%
+# http://httpd.apache.org/docs/2.0/misc/security_tips.html
+
+<VirtualHost *:%port%>
+
+    ServerName kmotion
+    ServerAdmin webmaster@localhost
+    DocumentRoot %www_dir%
+    Options -Indexes
+    #UserDir disabled root 
+    
+    <Directory />
+    Order Deny,Allow
+    Deny from All
+    </Directory>
+
+    <Directory %www_dir%>
+        # secure login ...
+        AuthType Basic
+        %LDAP_block%
+        Require valid-user
+	
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+    
+    <Directory %cgi_bin_dir%>
+	AddHandler mod_python .py
+        PythonHandler mod_python.publisher
+	# Display python errors to web browser - useful for debug
+        PythonDebug On
+    </Directory>
+    
+    Alias /images_dbase/ %images_dbase_dir%/
+    <Directory %images_dbase_dir%/>
+        # secure login ...
+        AuthType Basic
+        %LDAP_block%
+        Require valid-user
+	
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    Alias /kmotion_ramdisk/ %ramdisk_dir%/
+    <Directory %ramdisk_dir%/>
+        # secure login ...
+        AuthType Basic
+        %LDAP_block%
+        Require valid-user
+	
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+    
+    Alias /virtual_ramdisk/ %ramdisk_dir%/
+    <Directory %ramdisk_dir%/>
+        # secure login ...
+        AuthType Basic
+        %LDAP_block%
+        Require valid-user
+	
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    LogLevel warn
+
+    ErrorLog /var/log/apache2/error_kmotion.log
+    CustomLog /var/log/apache2/access_kmotion.log combined
+    
+</VirtualHost>

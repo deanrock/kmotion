@@ -1,0 +1,487 @@
+/*
+Copyright 2008 David Selby dave6502@googlemail.com
+
+This file is part of kmotion.
+
+kmotion is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+kmotion is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with kmotion.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+body {
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	overflow: hidden;
+}
+
+/* *****************************************************************************
+Common CSS classes and id's
+***************************************************************************** */
+
+.italic {
+	font-style: italic;
+}
+
+/* shut down all those fancy link colors and underlines */
+a:link {
+	color: #C1C1C1;
+	text-decoration: none;
+}
+a:visited {
+	color: #C1C1C1;
+	text-decoration: none;
+}
+a:focus {
+	color: #C1C1C1;
+	text-decoration: none;
+}
+a:hover {
+	color: #C1C1C1;
+	text-decoration: none;
+}
+a:active {
+	color: #C1C1C1;
+	text-decoration: none;
+}
+
+/* 'info_*' used to display centred messages */
+#info_high_line {
+	position: absolute;
+	top: 30%; 
+	width: 98%; 
+	height: 1px; 
+	overflow: visible }
+	
+#info_mid_line {
+	position: absolute;
+	top: 50%; 
+	width: 98%; 
+	height: 1px; 
+	overflow: visible }
+
+#info_text {
+	font-size: 70px; 
+	font-weight: bold; 
+	text-align: center;
+	color: #C1C1C1; 
+	position: relative; 
+	bottom: 60px;
+}
+
+#info_small_text {
+	font-size: 17px;
+	position: relative;
+	bottom: 35px;
+}
+
+/* *****************************************************************************
+Button bar section
+***************************************************************************** */
+
+#button_bar {
+	position: absolute; 
+	top: 0px;
+	right: 0px;
+	bottom: 0px; 
+	width: 155px;
+	
+	margin: 6px;
+	margin-left: 0px;
+	border: 2px solid;
+	border-color: #C1C1C1;
+	padding: 2px;
+}
+
+#button_bar #title {
+	color: #C1C1C1;
+	font-size: 37px;
+	font-weight: bold;
+	font-style: italic;
+	text-align: center;
+}
+
+#button_bar #version_num {
+	color: #C1C1C1;
+	font-size: 15px;
+	letter-spacing:1.6px;
+	display: block;
+	text-align: center;
+}
+
+#button_bar .divider {
+	display: block;
+	font-size: 13px;
+	text-align: center;
+	padding-bottom: 3px;
+	margin: 0px;
+}
+
+#button_bar .header {
+	display: block;
+	color: #000000;
+	font-size: 17px;
+	text-align: center;
+	font-weight: bold;
+	margin: 0px;
+	padding-bottom: 4px;
+}
+
+#button_bar .display_button {
+	float: left;
+	padding-top: 2px;
+	padding-right: 2px;
+}
+
+#button_bar .camera_button {
+	background: url(images/temp1.png) no-repeat bottom left;
+	float: left;
+	height: 32px;
+	width: 32px;
+	padding-top: 3px;
+	padding-right: 3px;
+	outline: none; /* hide dotted border in firefox */
+}
+
+#button_bar .camera_button span {
+	display: block;
+	padding-top: 7px;
+	text-align: center;
+	color: #C1C1C1;
+	font-weight: bold;
+	cursor: default; /* hide text 'bar' cursor */
+}
+
+#button_bar .function_button {
+	background: url(images/temp2.png) no-repeat bottom left;
+	float: left;
+	height: 32px;
+	width: 67px;
+	padding-top: 3px;
+	padding-right: 3px;
+	outline: none; /* hide dotted border in firefox */
+}
+
+#button_bar .function_button span {
+	display: block;
+	padding-top: 7px;
+	text-align: center;
+	color: #C1C1C1;
+	font-weight: bold;
+	cursor: default; /* hide text 'bar' cursor */
+}
+
+#button_bar .button_line {
+	padding-left: 9px; /* can't use text-align because of floats */
+}
+
+#button_bar #lower_section {
+	position: absolute; 
+	bottom: 3px;
+	left: 23px; /* can't use text-align because of position:absolute; */
+}
+
+#button_bar .css_button {
+	padding-left: 9px;
+}
+
+/* *****************************************************************************
+Main display section
+***************************************************************************** */
+
+#main_display {
+	position: absolute; 
+	left: 0px; 
+	top: 0px; 
+	right: 167px; 
+	bottom: 0px;
+	
+	margin: 6px;
+	margin-right: 0px;
+	border: 2px solid;
+	border-color: #C1C1C1;
+	padding: 2px;
+	color: #C1C1C1;
+}
+
+#main_display #title_FF { /* firefox top title */
+	padding-top: 4px;
+	letter-spacing: 10px;
+	font-size: 50px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#main_display #title_OP { /* opera top title */
+	padding-top: 4px;
+	letter-spacing: 10px;
+	font-size: 50px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#main_display #title_IE { /* IE top title */
+	padding-top: 8px;
+	letter-spacing: 10px;
+	font-size: 50px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#main_display .sub_title { /* sub title that goes with a top title */
+	font-size: 15px;
+	line-height: 30px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#main_display .divider {
+	font-size: 4px;
+	padding: 0px;
+	margin: 0px;
+	text-align: center;
+}
+
+#main_display .link_word {
+	color: #C1C1C1;
+}
+
+#main_display .margin_top_3px {
+	margin-top: 3px;
+}
+
+#main_display .margin_top_4px {
+	margin-top: 4px;
+}
+
+/* *****************************************************************************
+Main display section - CSS specific to 'archive'
+***************************************************************************** */
+
+#main_display #archive_title_FF { /* firefox archive title */
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 34px;
+	font-weight: bold;
+}
+
+#main_display #archive_title_OP { /* opera archive title */
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+#main_display #archive_title_IE { /* IE archive title */
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 34px;
+	font-weight: bold;
+}
+
+#main_display #archive_flash_warn {
+	text-align: center;
+	padding-top: 30px;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+#main_display .archive_title_hlight {
+	color: #818181;
+}
+
+#main_display .archive_bar {
+	margin-top: 8px;
+	height: 20px;
+	text-align: center;
+}
+
+#main_display .archive_backdrop {
+	margin-top: 11px;
+	overflow: auto;
+	font-size: 17px;
+	font-weight: bold;
+	color: #818181; 
+	margin-left: auto;
+	margin-right: auto;
+	background-image: url('./images/backdrop.png');
+}
+
+#main_display .archive_msg { 
+	color: #818181; 
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 17px;
+	font-weight: bold;
+}
+
+#main_display .archive_timeline {
+	margin-top: 11px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* *****************************************************************************
+Main display section - CSS specific to 'config' - General
+***************************************************************************** */
+
+#main_display .margin_left_20px {
+	margin-left: 20px;
+}
+
+#main_display .config_bar {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#main_display .config_backdrop {
+	width: 790px;
+	height: 540px;
+	margin-top: 11px;
+	margin-left: auto;
+	margin-right: auto;
+	background-image: url('./images/backdrop.png');
+}
+
+#main_display .config_tick_box { 
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	margin-left: 20px;
+	float: left;
+}
+
+#main_display .config_button { 
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	margin-left: 24px;
+	float: left;
+}
+
+#main_display .config_text { 
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	margin-left: 20px;
+}
+
+#main_display .config_text_basic { 
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	margin-left: 0px;
+}
+	
+#main_display .config_text_center {
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#main_display .disabled {
+	color: #E2E2E2;
+}
+
+/* *****************************************************************************
+Main display section - CSS specific to 'config' - Server load
+***************************************************************************** */
+
+#main_display .bar_bground {
+	height: 23px;
+	width: 750px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #818181;
+	border-style: solid;
+}
+
+#main_display .bar_fground{
+	height: 23px;
+	width: 0px;
+	background-color: #9696ff;
+	position: relative;
+}
+
+#main_display .bar_value {
+	color: #000000;
+	line-height: 23px;
+	font-size: 17px;
+	font-weight: bold;
+	float: left;
+	position:relative;
+	z-index: 1;
+}
+
+#main_display .bar_text { /* progress bar text in a 75px window to align stats */
+	width: 75px;
+	color: #000000;
+	line-height: 23px;
+	font-size: 17px;
+	font-weight: bold;
+	padding-left: 5px;
+	float: left;
+	position: relative;
+	z-index: 1;
+}
+
+#main_display .bar_text_IE { /* IE progress bar text in a 75px window to align stats */
+	width: 75px;
+	color: #000000;
+	line-height: 23px;
+	font-size: 17px;
+	font-weight: bold;
+	padding-left: 5px;
+	float: left;
+	position: relative;
+	top: -23px;
+	z-index: 1;
+}
+
+/* *****************************************************************************
+Main display section - CSS specific to 'config' - Server Error
+***************************************************************************** */
+
+#main_display .config_error_block {
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	width: 750px;
+	height: 500px;
+	margin-left: 23px;
+	overflow: auto;
+}
+
+/* *****************************************************************************
+Main display section - CSS specific to 'logs', 'about' and 'msg'
+***************************************************************************** */
+
+#main_display .para_msg { 
+	color: #818181; 
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 17px;
+	font-weight: bold;
+	width: 750px;
+}
+
+#main_display .logs_backdrop {
+	color: #818181; 
+	font-size: 17px;
+	font-weight: bold;
+	width: 750px;
+	margin-top: 18px;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+}
